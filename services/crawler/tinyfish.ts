@@ -1,62 +1,96 @@
+import { TinyFish, RunStatus } from '@tiny-fish/sdk';
 import type { PageExplorationResult } from '../../types/platform';
+import { extractForms, extractListContainers } from './form-extractor';
+import { htmlToMarkdown, cleanHtml } from './html-cleaner';
 
 export interface TinyFishConfig {
   apiKey?: string;
-  apiUrl?: string;
 }
 
 export class TinyFishClient {
-  private apiKey: string | null;
-  private apiUrl: string;
+  private client: TinyFish | null = null;
+  private apiKey: string | null = null;
 
   constructor(config?: TinyFishConfig) {
     this.apiKey = config?.apiKey || process.env.TINYFISH_API_KEY || null;
-    this.apiUrl = config?.apiUrl || process.env.TINYFISH_API_URL || 'https://agent.tinyfish.io/v1';
+    if (this.apiKey && this.apiKey.trim().length > 0) {
+      this.client = new TinyFish({
+        apiKey: this.apiKey,
+      });
+    }
   }
 
   isConfigured(): boolean {
-    return Boolean(this.apiKey && this.apiKey.trim().length > 0);
+    return Boolean(this.client && this.apiKey && this.apiKey.trim().length > 0);
   }
 
   async explore(url: string, goal?: string): Promise<PageExplorationResult | null> {
-    if (!this.isConfigured()) {
+    if (!this.client) {
       return null;
     }
 
     try {
-      const response = await fetch(`${this.apiUrl}/explore`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.apiKey}`,
-          'User-Agent': 'Web2MCP/1.0',
-        },
-        body: JSON.stringify({
-          url,
-          goal: goal || 'Discover all interactive forms, search filters, detail endpoints and listing structures',
-          depth: 2,
-          renderJs: true,
-          captureEvidence: true,
-        }),
+      // 1. Try TinyFish Autonomous Agent Run
+      const agentGoal = goal || `
+        Explore this website at ${url}.
+        Discover all interactive forms, search filters, pagination, and data listing collections.
+        Extract form input names, search parameters, action endpoints, and sample listing items.
+      `.trim();
+
+      const run = await this.client.agent.run({
+        url,
+        goal: agentGoal,
       });
 
-      if (!response.ok) {
-        console.warn(`[TinyFish] Agent returned ${response.status}: ${response.statusText}, falling back to built-in driver.`);
-        return null;
+      if (run.status === RunStatus.COMPLETED && run.result) {
+        let resultObj: any = run.result;
+        if (typeof run.result === 'string') {
+          try {
+            resultObj = JSON.parse(run.result);
+          } catch {
+            resultObj = { markdown: run.result };
+          }
+        }
+
+        const title = resultObj.title || new URL(url).hostname;
+        const markdown = resultObj.markdown || resultObj.text || '';
+        const rawHtml = resultObj.html || '';
+
+        return {
+          url,
+          title,
+          cleanMarkdown: markdown || htmlToMarkdown(rawHtml),
+          forms: resultObj.forms || (rawHtml ? extractForms(rawHtml) : []),
+          listContainers: resultObj.listContainers || (rawHtml ? extractListContainers(rawHtml) : []),
+          navigationLinks: resultObj.navigationLinks || [],
+          inferredSiteType: resultObj.inferredSiteType || 'spa_portal',
+        };
       }
 
-      const data = await response.json();
-      return {
+      // 2. Fallback to TinyFish Direct Fetch if agent run did not return completed structured data
+      const fetchResult = await this.client.fetch.getContents({
         url,
-        title: data.title || new URL(url).hostname,
-        cleanMarkdown: data.cleanMarkdown || data.text || '',
-        forms: data.forms || [],
-        listContainers: data.listContainers || [],
-        navigationLinks: data.navigationLinks || [],
-        inferredSiteType: data.inferredSiteType || 'spa_portal',
-      };
+      });
+
+      if (fetchResult && (fetchResult as any).result) {
+        const res = (fetchResult as any).result;
+        const html = res.html || res.content || '';
+        const markdown = res.markdown || htmlToMarkdown(html);
+
+        return {
+          url,
+          title: res.title || new URL(url).hostname,
+          cleanMarkdown: markdown,
+          forms: extractForms(html),
+          listContainers: extractListContainers(html),
+          navigationLinks: [],
+          inferredSiteType: 'spa_portal',
+        };
+      }
+
+      return null;
     } catch (err) {
-      console.warn('[TinyFish] Connection failed, switching to local fallback driver:', err);
+      console.warn('[TinyFish] Autonomous agent call failed, engaging fallback driver:', err);
       return null;
     }
   }
