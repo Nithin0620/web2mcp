@@ -60,9 +60,12 @@ export default async function HomePage() {
       </section>
 
       {/* 3-Step Interactive Pipeline */}
-      <section className="max-w-6xl mx-auto px-4">
+      <section id="how-it-works" className="max-w-6xl mx-auto px-4 scroll-mt-24">
         <div className="text-center space-y-2 mb-12">
-          <h2 className="text-2xl font-bold text-white">How Web2MCP Works</h2>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-semibold border border-blue-500/20">
+            Step-by-Step Architecture
+          </div>
+          <h2 className="text-3xl font-bold text-white">How Web2MCP Works</h2>
           <p className="text-sm text-slate-400">From a raw human portal to an authenticated Model Context Protocol tool</p>
         </div>
 
@@ -104,6 +107,79 @@ export default async function HomePage() {
             <div className="pt-2 text-xs font-mono text-emerald-400 flex items-center gap-1">
               <CheckCircle2 className="h-3.5 w-3.5" /> Continuous Health & Drift Detection
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Platform Features Section */}
+      <section id="features" className="max-w-6xl mx-auto px-4 scroll-mt-24 space-y-12">
+        <div className="text-center space-y-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 text-purple-400 text-xs font-semibold border border-purple-500/20">
+            Enterprise-Grade Platform
+          </div>
+          <h2 className="text-3xl font-bold text-white">Production-Ready MCP Capabilities</h2>
+          <p className="text-sm text-slate-400">Everything AI agents need to operate human websites reliably.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800 space-y-3">
+            <div className="h-10 w-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
+              <Layers className="h-5 w-5" />
+            </div>
+            <h3 className="font-semibold text-white text-base">Streamable HTTP Transport</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Standard JSON-RPC 2.0 streaming endpoints compliant with the 2024-11-05 & 2025-11-25 MCP specifications.
+            </p>
+          </div>
+
+          <div className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800 space-y-3">
+            <div className="h-10 w-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
+              <Activity className="h-5 w-5" />
+            </div>
+            <h3 className="font-semibold text-white text-base">Evidence Vault Auditing</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Every synthetic probe captures execution traces and DOM hashes so you know when a target site changes structure.
+            </p>
+          </div>
+
+          <div className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800 space-y-3">
+            <div className="h-10 w-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+              <Shield className="h-5 w-5" />
+            </div>
+            <h3 className="font-semibold text-white text-base">Two-Phase Safety Gate</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Automatic interception for consequential actions (orders, payments) requiring human token authorization.
+            </p>
+          </div>
+
+          <div className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800 space-y-3">
+            <div className="h-10 w-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold">
+              <Terminal className="h-5 w-5" />
+            </div>
+            <h3 className="font-semibold text-white text-base">1-Click IDE Installers</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Install generated servers directly into Cursor, Claude Desktop, and VS Code with a single CLI command.
+            </p>
+          </div>
+
+          <div className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800 space-y-3">
+            <div className="h-10 w-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold">
+              <Globe className="h-5 w-5" />
+            </div>
+            <h3 className="font-semibold text-white text-base">TinyFish Cloud Automation</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Cloud browser agents navigate complex SPAs, solve multi-step forms, and maintain authenticated sessions.
+            </p>
+          </div>
+
+          <div className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800 space-y-3">
+            <div className="h-10 w-10 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold">
+              <Sparkles className="h-5 w-5" />
+            </div>
+            <h3 className="font-semibold text-white text-base">Free Tier & Micro-Pricing</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              3 free generations as a guest, 10 on signup, and affordable $2 Starter and $20 Pro tiers with generous quotas.
+            </p>
           </div>
         </div>
       </section>

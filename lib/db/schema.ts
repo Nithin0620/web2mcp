@@ -46,9 +46,44 @@ export const evidence = sqliteTable('evidence', {
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
 });
 
+export const users = sqliteTable('users', {
+  id: text('id').primaryKey(),
+  email: text('email').notNull().unique(),
+  name: text('name').notNull(),
+  passwordHash: text('password_hash').notNull(),
+  tier: text('tier').notNull().default('free'), // 'free' | 'starter' | 'pro' | 'enterprise'
+  creditsRemaining: integer('credits_remaining').notNull().default(10),
+  creditsUsed: integer('credits_used').notNull().default(0),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),
+});
+
+export const anonymousSessions = sqliteTable('anonymous_sessions', {
+  id: text('id').primaryKey(),
+  creditsRemaining: integer('credits_remaining').notNull().default(3),
+  creditsUsed: integer('credits_used').notNull().default(0),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),
+});
+
+export const userSessions = sqliteTable('user_sessions', {
+  id: text('id').primaryKey(),
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+});
+
 export type ProjectRow = typeof projects.$inferSelect;
 export type InsertProjectRow = typeof projects.$inferInsert;
 export type ToolRow = typeof tools.$inferSelect;
 export type InsertToolRow = typeof tools.$inferInsert;
 export type EvidenceRow = typeof evidence.$inferSelect;
 export type InsertEvidenceRow = typeof evidence.$inferInsert;
+export type UserRow = typeof users.$inferSelect;
+export type InsertUserRow = typeof users.$inferInsert;
+export type AnonymousSessionRow = typeof anonymousSessions.$inferSelect;
+export type InsertAnonymousSessionRow = typeof anonymousSessions.$inferInsert;
+export type UserSessionRow = typeof userSessions.$inferSelect;
+export type InsertUserSessionRow = typeof userSessions.$inferInsert;

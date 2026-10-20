@@ -80,6 +80,42 @@ export async function initDb(): Promise<void> {
       created_at INTEGER NOT NULL
     );
   `);
+
+  // Users table
+  await client.execute(`
+    CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY,
+      email TEXT NOT NULL UNIQUE,
+      name TEXT NOT NULL,
+      password_hash TEXT NOT NULL,
+      tier TEXT NOT NULL DEFAULT 'free',
+      credits_remaining INTEGER NOT NULL DEFAULT 10,
+      credits_used INTEGER NOT NULL DEFAULT 0,
+      created_at INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL
+    );
+  `);
+
+  // Anonymous Sessions table (3 free credits)
+  await client.execute(`
+    CREATE TABLE IF NOT EXISTS anonymous_sessions (
+      id TEXT PRIMARY KEY,
+      credits_remaining INTEGER NOT NULL DEFAULT 3,
+      credits_used INTEGER NOT NULL DEFAULT 0,
+      created_at INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL
+    );
+  `);
+
+  // User Sessions table
+  await client.execute(`
+    CREATE TABLE IF NOT EXISTS user_sessions (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      expires_at INTEGER NOT NULL,
+      created_at INTEGER NOT NULL
+    );
+  `);
 }
 
 export const db = new Proxy({} as LibSQLDatabase<typeof schema>, {

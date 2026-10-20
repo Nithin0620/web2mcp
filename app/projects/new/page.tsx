@@ -2,22 +2,24 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Sparkles, ArrowRight, Globe, Target, Terminal, CheckCircle2 } from 'lucide-react';
+import Link from 'next/link';
+import { Sparkles, ArrowRight, Globe, Target, Terminal, CheckCircle2, Zap, AlertCircle, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { LiveTerminal, type TerminalLog } from '@/components/crawler/live-terminal';
+import { useAuth } from '@/lib/auth/auth-context';
 
 const PRESETS = [
   {
-    name: 'Airline Booking Portal',
+    name: 'Hacker News Portal',
     url: 'https://news.ycombinator.com',
-    goal: 'Search flight listings, compare airfares, and check seat availability',
+    goal: 'Search tech stories, get item discussions, and extract top submissions',
   },
   {
-    name: 'Government Tender Portal',
+    name: 'Airline Booking Portal',
     url: 'https://httpbin.org/forms/post',
-    goal: 'Explore procurement tenders, extract contract details, and check deadlines',
+    goal: 'Search flight listings, compare airfares, and check seat availability',
   },
   {
     name: 'Tech Careers Job Board',
@@ -28,6 +30,7 @@ const PRESETS = [
 
 export default function NewProjectPage() {
   const router = useRouter();
+  const { authenticated, creditsRemaining, tier, openAuthModal, refreshAuth } = useAuth();
   const [url, setUrl] = useState('');
   const [goal, setGoal] = useState('');
   const [name, setName] = useState('');
@@ -58,6 +61,15 @@ export default function NewProjectPage() {
     e.preventDefault();
     if (!url) return;
 
+    if (creditsRemaining <= 0) {
+      if (!authenticated) {
+        openAuthModal('register');
+      } else {
+        router.push('/pricing');
+      }
+      return;
+    }
+
     setLoading(true);
     setError(null);
     setLogs([]);
@@ -67,7 +79,6 @@ export default function NewProjectPage() {
     addLog('tinyfish', 'Dispatching autonomous exploration agent...');
 
     try {
-      // Simulate live steps if needed or call API
       setTimeout(() => addLog('fetching', 'Navigating DOM, hydration check, rendering SPAs...'), 600);
       setTimeout(() => addLog('extracting', 'Parsing interactive forms, query endpoints & result lists...'), 1400);
       setTimeout(() => addLog('generating', 'Synthesizing typed JSON Schema & evaluating safety gates...'), 2200);
@@ -81,9 +92,17 @@ export default function NewProjectPage() {
       const data = await res.json();
 
       if (!res.ok) {
+        if (res.status === 402) {
+          if (!authenticated) {
+            openAuthModal('register');
+          } else {
+            router.push('/pricing');
+          }
+        }
         throw new Error(data.error || 'Failed to generate MCP tools');
       }
 
+      await refreshAuth();
       addLog('complete', `Successfully verified ${data.toolsCount} live MCP tools! Saving evidence...`);
       setCompletedProjectId(data.projectId);
 
@@ -101,6 +120,48 @@ export default function NewProjectPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-10 space-y-8">
+      {/* Credits Status Banner */}
+      {!authenticated ? (
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-950/60 to-indigo-950/40 border border-blue-800/40 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs shadow-lg">
+          <div className="flex items-center gap-3">
+            <div className="h-8 w-8 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center shrink-0">
+              <Zap className="h-4 w-4 fill-current" />
+            </div>
+            <div>
+              <p className="font-semibold text-slate-200">
+                Guest Mode: <span className="text-blue-400">{creditsRemaining} of 3 free credits</span> remaining
+              </p>
+              <p className="text-slate-400 text-[11px]">
+                Create a free account to unlock 10 full generations with evidence vault tracking.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => openAuthModal('register')}
+            className="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-colors shrink-0 shadow-sm"
+          >
+            Claim 10 Free Credits
+          </button>
+        </div>
+      ) : (
+        <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2.5">
+            <ShieldCheck className="h-4 w-4 text-emerald-400" />
+            <span className="text-slate-300">
+              Logged in as <strong className="text-white">{tier.toUpperCase()}</strong> plan user ·{' '}
+              <strong className="text-emerald-400">{creditsRemaining} credits</strong> available
+            </span>
+          </div>
+          <Link
+            href="/pricing"
+            className="text-blue-400 hover:text-blue-300 font-medium hover:underline text-xs"
+          >
+            Manage Plan →
+          </Link>
+        </div>
+      )}
+
       <div>
         <h1 className="text-3xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
           <Sparkles className="h-7 w-7 text-blue-400" /> Generate Live MCP Server

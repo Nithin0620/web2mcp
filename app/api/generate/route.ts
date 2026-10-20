@@ -5,12 +5,33 @@ import { exploreWebsite } from '@/services/crawler/explorer';
 import { inferToolsFromExploration } from '@/services/ai/schema-inference';
 import { executeProbe } from '@/services/validation/probe-runner';
 import { recordEvidence } from '@/services/validation/evidence-vault';
+import { getSessionFromTokens, deductCredit } from '@/lib/auth/session';
 import crypto from 'crypto';
 
 export async function POST(req: NextRequest) {
   await initDb();
 
   try {
+    const userSessionToken = req.cookies.get('web2mcp_session')?.value;
+    const anonSessionToken = req.cookies.get('web2mcp_anon')?.value;
+    const session = await getSessionFromTokens(userSessionToken, anonSessionToken);
+
+    if (session.creditsRemaining <= 0) {
+      const isAnon = session.type === 'anonymous';
+      return NextResponse.json(
+        {
+          error: isAnon
+            ? 'Free guest credits (3) exhausted. Sign in or create a free account to unlock 10 credits!'
+            : 'Account credits exhausted. Please upgrade to Starter ($2/mo) or Pro ($20/mo) for more credits.',
+          code: 'CREDIT_LIMIT_REACHED',
+          isAnonymous: isAnon,
+          creditsRemaining: 0,
+          upgradeUrl: '/pricing',
+        },
+        { status: 402 }
+      );
+    }
+
     const { url, goal, name } = await req.json();
 
     if (!url) {
@@ -72,7 +93,10 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    return NextResponse.json({
+    // 5. Deduct 1 credit upon successful generation
+    const deductRes = await deductCredit(session);
+
+    const response = NextResponse.json({
       success: true,
       projectId,
       apiKey,
@@ -81,7 +105,21 @@ export async function POST(req: NextRequest) {
       toolsCount: inferredTools.length,
       tools: inferredTools,
       endpointUrl: `/api/mcp/${projectId}/mcp`,
+      creditsRemaining: deductRes.creditsRemaining,
     });
+
+    // Ensure anonymous session cookie is stored on client
+    if (session.type === 'anonymous' && session.anonId && !anonSessionToken) {
+      response.cookies.set('web2mcp_anon', session.anonId, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 365 * 24 * 60 * 60,
+      });
+    }
+
+    return response;
   } catch (err: unknown) {
     const errorMsg = err instanceof Error ? err.message : String(err);
     return NextResponse.json({ error: errorMsg }, { status: 500 });
