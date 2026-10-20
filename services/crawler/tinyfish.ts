@@ -12,11 +12,14 @@ export class TinyFishClient {
   private apiKey: string | null = null;
 
   constructor(config?: TinyFishConfig) {
-    this.apiKey = config?.apiKey || process.env.TINYFISH_API_KEY || null;
-    if (this.apiKey && this.apiKey.trim().length > 0) {
-      this.client = new TinyFish({
-        apiKey: this.apiKey,
-      });
+    const rawKey = config?.apiKey || process.env.TINYFISH_API_KEY || null;
+    if (rawKey) {
+      this.apiKey = rawKey.replace(/^[=\s"']+/, '').replace(/[\s"']+$/, '');
+      if (this.apiKey.length > 0) {
+        this.client = new TinyFish({
+          apiKey: this.apiKey,
+        });
+      }
     }
   }
 
@@ -69,7 +72,7 @@ export class TinyFishClient {
 
       // 2. Fallback to TinyFish Direct Fetch if agent run did not return completed structured data
       const fetchResult = await this.client.fetch.getContents({
-        url,
+        urls: [url],
       });
 
       if (fetchResult && (fetchResult as any).result) {
