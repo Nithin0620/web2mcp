@@ -13,10 +13,11 @@ import {
   ChevronRight,
   Cpu,
   Code2,
+  Wrench,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Reveal, StaggerContainer } from '@/components/ui/reveal';
+import { Reveal } from '@/components/ui/reveal';
 import { initDb, db } from '@/lib/db/client';
 import { projects, tools } from '@/lib/db/schema';
 
@@ -24,6 +25,17 @@ export default async function HomePage() {
   await initDb();
   const allProjects = await db.select().from(projects);
   const allTools = await db.select().from(tools);
+
+  // Filter out internal test runner artifacts to feature authentic, user-generated MCP servers
+  const cleanProjects = allProjects.filter(
+    (p) =>
+      !p.id.startsWith('test-') &&
+      !p.id.includes('val-') &&
+      !p.id.includes('e2e-') &&
+      !p.id.startsWith('proj-mcp-')
+  ).reverse();
+
+  const displayProjects = cleanProjects.length > 0 ? cleanProjects : allProjects.slice(0, 6);
 
   return (
     <div className="space-y-24 pb-28 bg-white text-[#061B31] overflow-hidden">
@@ -296,14 +308,14 @@ export default async function HomePage() {
         </Reveal>
       </section>
 
-      {/* Active Projects Directory */}
+      {/* Active Projects Directory with Showcased Generated Tools */}
       <section className="max-w-6xl mx-auto px-4 space-y-6">
         <Reveal animation="fade-up" delay={50}>
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl font-bold text-[#0A2540]">Generated MCP Projects</h2>
               <p className="text-xs text-[#50617A]">
-                Live websites currently exposed as verified MCP servers
+                Live websites currently exposed as verified MCP servers with generated tools
               </p>
             </div>
             <Link href="/projects/new">
@@ -314,7 +326,7 @@ export default async function HomePage() {
           </div>
         </Reveal>
 
-        {allProjects.length === 0 ? (
+        {displayProjects.length === 0 ? (
           <Reveal animation="fade-up" delay={150}>
             <div className="p-12 text-center rounded-lg border border-[#E5EDF5] bg-[#F8FAFD] space-y-3">
               <p className="text-sm text-[#50617A]">No websites converted yet.</p>
@@ -324,41 +336,98 @@ export default async function HomePage() {
             </div>
           </Reveal>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {allProjects.map((p, idx) => {
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {displayProjects.map((p, idx) => {
               const projectTools = allTools.filter((t) => t.projectId === p.id);
               const consequentialCount = projectTools.filter((t) => t.requiresApproval).length;
 
               return (
                 <Reveal key={p.id} animation="fade-up" delay={idx * 80}>
-                  <Link
-                    href={`/projects/${p.id}`}
-                    className="rounded-lg border border-[#E5EDF5] bg-white p-5 hover:border-[#533AFD] stripe-hover-card flex flex-col justify-between group space-y-4 shadow-[0_1px_2px_rgba(50,50,93,0.04)] h-full"
-                  >
+                  <div className="rounded-lg border border-[#E5EDF5] bg-white p-5 hover:border-[#533AFD] stripe-hover-card flex flex-col justify-between group space-y-4 shadow-[0_2px_4px_rgba(50,50,93,0.04)] h-full">
+                    {/* Project Header */}
                     <div>
                       <div className="flex items-center justify-between">
-                        <h3 className="font-semibold text-[#0A2540] group-hover:text-[#533AFD] transition-colors">
-                          {p.name}
-                        </h3>
-                        <Badge variant="success" className="text-[10px] gap-1">
+                        <Link href={`/projects/${p.id}`} className="group-hover:text-[#533AFD] transition-colors">
+                          <h3 className="font-semibold text-base text-[#0A2540] group-hover:text-[#533AFD] transition-colors flex items-center gap-2">
+                            {p.name}
+                          </h3>
+                        </Link>
+                        <Badge variant="success" className="text-[10px] gap-1 font-medium">
                           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> Active
                         </Badge>
                       </div>
-                      <p className="text-xs text-[#50617A] line-clamp-1 mt-1 font-mono">
-                        {p.targetUrl}
-                      </p>
+
+                      <a
+                        href={p.targetUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-xs text-[#50617A] hover:text-[#533AFD] flex items-center gap-1 font-mono mt-1 truncate"
+                      >
+                        <Globe className="h-3 w-3 shrink-0" />
+                        <span className="truncate">{p.targetUrl}</span>
+                      </a>
                     </div>
 
-                    <div className="pt-3 border-t border-[#E5EDF5] flex items-center justify-between text-xs text-[#50617A]">
-                      <span>{projectTools.length} live tools</span>
-                      {consequentialCount > 0 && (
-                        <span className="text-amber-700 font-medium text-[11px]">
-                          {consequentialCount} approval-gated
+                    {/* Showcased Generated Tools List */}
+                    <div className="space-y-2 py-1">
+                      <div className="flex items-center justify-between text-[11px] text-[#64748D] uppercase tracking-wider font-semibold">
+                        <span className="flex items-center gap-1">
+                          <Wrench className="h-3 w-3 text-[#533AFD]" /> Generated MCP Tools ({projectTools.length})
                         </span>
+                        {consequentialCount > 0 && (
+                          <span className="text-amber-700 font-medium normal-case text-[10px] bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
+                            {consequentialCount} approval gated
+                          </span>
+                        )}
+                      </div>
+
+                      {projectTools.length === 0 ? (
+                        <p className="text-xs text-[#94A3B8] italic">No tools generated yet.</p>
+                      ) : (
+                        <div className="space-y-1.5">
+                          {projectTools.map((t) => (
+                            <div
+                              key={t.id}
+                              className="p-2.5 rounded-md bg-[#F8FAFD] border border-[#E5EDF5] hover:border-[#D6D9FC] transition-colors flex items-start justify-between gap-2"
+                            >
+                              <div className="space-y-0.5 min-w-0">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="font-mono text-xs font-semibold text-[#533AFD]">
+                                    {t.name}()
+                                  </span>
+                                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-white border border-[#E5EDF5] text-[#50617A] uppercase font-mono">
+                                    {t.category}
+                                  </span>
+                                  {t.requiresApproval && (
+                                    <span className="text-[9px] px-1 py-0.2 rounded bg-rose-50 border border-rose-200 text-rose-700 font-semibold uppercase">
+                                      Gated
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-[11px] text-[#50617A] line-clamp-1 leading-snug">
+                                  {t.description}
+                                </p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
                       )}
-                      <ChevronRight className="h-4 w-4 text-[#94A3B8] group-hover:text-[#533AFD] group-hover:translate-x-1 transition-all" />
                     </div>
-                  </Link>
+
+                    {/* Streamable HTTP Endpoint & Quick Actions */}
+                    <div className="pt-3 border-t border-[#E5EDF5] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                      <div className="font-mono text-[11px] text-[#50617A] bg-[#F8FAFD] border border-[#E5EDF5] px-2 py-1 rounded truncate max-w-full sm:max-w-[260px]">
+                        <span className="text-[#533AFD] font-bold">POST</span> /api/mcp/{p.id}/mcp
+                      </div>
+
+                      <Link
+                        href={`/projects/${p.id}`}
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-[#533AFD] hover:text-[#5452FB] transition-colors shrink-0"
+                      >
+                        Open Dashboard & Playground <ChevronRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
+                      </Link>
+                    </div>
+                  </div>
                 </Reveal>
               );
             })}

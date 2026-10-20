@@ -68,7 +68,7 @@ describe('Probe Runner & Evidence Vault', () => {
     const validOutput = [{ airline: 'Delta', price: '$350' }];
     expect(validateToolOutput(testTool, validOutput).valid).toBe(true);
 
-    const emptyOutput = [];
+    const emptyOutput: unknown[] = [];
     expect(validateToolOutput(testTool, emptyOutput).valid).toBe(true);
   });
 

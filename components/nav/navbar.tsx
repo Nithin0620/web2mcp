@@ -31,12 +31,9 @@ export function Navbar() {
             <div>
               <span className="font-bold text-base tracking-tight text-[#0A2540] flex items-center gap-1.5">
                 Web2MCP
-                <span className="text-[10px] uppercase font-semibold tracking-wider text-[#533AFD] bg-[#D6D9FC]/40 px-1.5 py-0.5 rounded-full border border-[#D6D9FC]">
-                  Live
-                </span>
               </span>
               <span className="block text-[11px] text-[#50617A] -mt-0.5">
-                Website → TinyFish + AI → Live MCP Tools
+                Website → TinyFish + AI → MCP Tools
               </span>
             </div>
           </Link>

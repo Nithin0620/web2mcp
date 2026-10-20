@@ -26,7 +26,10 @@ export async function serveCommand(options: { project: string }) {
     try {
       const rpcRequest = JSON.parse(trimmed);
       const response = await handleMCPRequest(projectId, rpcRequest);
-      process.stdout.write(JSON.stringify(response) + '\n');
+      // In JSON-RPC 2.0, notifications (requests without an id) do not produce a response
+      if (rpcRequest.id !== undefined && response) {
+        process.stdout.write(JSON.stringify(response) + '\n');
+      }
     } catch (err: unknown) {
       const errorMsg = err instanceof Error ? err.message : String(err);
       process.stdout.write(

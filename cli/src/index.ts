@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import 'dotenv/config';
 import { addCommand } from './commands/add';
 import { testCommand } from './commands/test';
 import { installCommand } from './commands/install';
@@ -15,31 +16,39 @@ Usage:
 Commands:
   add <url>                 Explore a website, infer schemas, and generate MCP tools
                             Options:
-                              --goal <text>   Operational intent (e.g. "search flights")
-                              --name <text>   Custom project name
+                              --goal <text>     Operational intent (e.g. "search flights")
+                              --name <text>     Custom project name
+                              --host <url>      Web2MCP host domain (default: https://web2mcp.ssh.net.in)
+                              --skip-probe      Skip live probe validation
 
   list                      List all registered projects and generated tools
                             Options:
-                              --project <id>  Show tools for a specific project
+                              --project <id>    Show tools for a specific project
+                              --host <url>      Custom host domain
 
   test <tool_name>          Execute a live probe test against a generated tool
                             Options:
-                              --params <json> Custom JSON parameter payload
+                              --project <id>    Filter by project ID
+                              --params <json>   Custom JSON parameter payload
 
   install <ide>             Auto-configure an IDE client (cursor, claude, vscode)
                             Options:
-                              --project <id>  Target project ID
-                              --name <name>   Custom server identifier
+                              --project <id>    Target project ID
+                              --name <name>     Custom server identifier
+                              --host <url>      Host domain (default: https://web2mcp.ssh.net.in)
+                              --endpoint <url>  Explicit MCP endpoint URL
+                              --apiKey <key>    Bearer API key
 
   serve                     Run local stdio Model Context Protocol server
                             Options:
-                              --project <id>  Project ID to serve
+                              --project <id>    Project ID to serve
 
 Examples:
   web2mcp add https://example.com/flights --goal "Search flights and fares"
-  web2mcp install cursor --project proj-1234
+  web2mcp install cursor --project proj-84bd028d
+  web2mcp install claude --project proj-84bd028d --host https://web2mcp.ssh.net.in
   web2mcp test search_flights --params '{"origin":"NYC"}'
-  web2mcp serve --project proj-1234
+  web2mcp serve --project proj-84bd028d
 `);
 }
 
@@ -52,13 +61,33 @@ async function main() {
     return;
   }
 
-  // Parse key-value options
+  // Parse key-value options supporting --flag, --key=val, and --key val
   const options: Record<string, string> = {};
   for (let i = 1; i < args.length; i++) {
-    if (args[i].startsWith('--')) {
-      const key = args[i].replace(/^--/, '');
-      const val = args[i + 1] && !args[i + 1].startsWith('--') ? args[i + 1] : 'true';
-      options[key] = val;
+    const arg = args[i];
+    if (arg.startsWith('--')) {
+      const eqIdx = arg.indexOf('=');
+      if (eqIdx !== -1) {
+        const key = arg.slice(2, eqIdx);
+        const val = arg.slice(eqIdx + 1);
+        options[key] = val;
+      } else {
+        const key = arg.slice(2);
+        if (i + 1 < args.length && !args[i + 1].startsWith('-')) {
+          options[key] = args[i + 1];
+          i++;
+        } else {
+          options[key] = 'true';
+        }
+      }
+    } else if (arg.startsWith('-') && arg.length === 2) {
+      const key = arg.slice(1);
+      if (i + 1 < args.length && !args[i + 1].startsWith('-')) {
+        options[key] = args[i + 1];
+        i++;
+      } else {
+        options[key] = 'true';
+      }
     }
   }
 
@@ -73,6 +102,8 @@ async function main() {
         await addCommand(url, {
           goal: options.goal,
           name: options.name,
+          host: options.host,
+          skipProbe: options.skipProbe === 'true' || options['skip-probe'] === 'true',
         });
         break;
       }
@@ -99,12 +130,15 @@ async function main() {
         await installCommand(ide, {
           project: options.project,
           name: options.name,
+          host: options.host,
+          endpoint: options.endpoint,
+          apiKey: options.apiKey || options.key,
         });
         break;
       }
 
       case 'list': {
-        await listCommand({ project: options.project });
+        await listCommand({ project: options.project, host: options.host });
         break;
       }
 

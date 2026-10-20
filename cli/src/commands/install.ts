@@ -5,26 +5,52 @@ import { installToCursor } from '../installers/cursor';
 import { installToClaude } from '../installers/claude';
 import { installToVSCode } from '../installers/vscode';
 
+const DEFAULT_HOST = (process.env.WEB2MCP_HOST || process.env.NEXT_PUBLIC_APP_URL || 'https://web2mcp.ssh.net.in').replace(/\/$/, '');
+
 export async function installCommand(
   targetIde: string,
-  options: { project?: string; endpoint?: string; apiKey?: string; name?: string }
+  options: { project?: string; endpoint?: string; apiKey?: string; name?: string; host?: string }
 ) {
-  await initDb();
   let endpoint = options.endpoint;
   let apiKey = options.apiKey;
-  let serverName = options.name || 'web2mcp';
+  let serverName = options.name;
+  const host = (options.host || DEFAULT_HOST).replace(/\/$/, '');
 
   if (options.project) {
-    const [proj] = await db.select().from(projects).where(eq(projects.id, options.project));
-    if (proj) {
-      endpoint = endpoint || `http://localhost:3000/api/mcp/${proj.id}/mcp`;
-      apiKey = apiKey || proj.apiKey;
-      serverName = `web2mcp-${proj.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+    try {
+      await initDb();
+      const [proj] = await db.select().from(projects).where(eq(projects.id, options.project));
+      if (proj) {
+        endpoint = endpoint || `${host}/api/mcp/${proj.id}/mcp`;
+        apiKey = apiKey || proj.apiKey;
+        if (!serverName) {
+          const cleanSlug = proj.name
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '')
+            .slice(0, 32);
+          serverName = `web2mcp-${cleanSlug || 'server'}`;
+        }
+      } else {
+        endpoint = endpoint || `${host}/api/mcp/${options.project}/mcp`;
+        if (!serverName) {
+          serverName = `web2mcp-${options.project}`;
+        }
+      }
+    } catch {
+      endpoint = endpoint || `${host}/api/mcp/${options.project}/mcp`;
+      if (!serverName) {
+        serverName = `web2mcp-${options.project}`;
+      }
     }
   }
 
+  if (!serverName) {
+    serverName = 'web2mcp';
+  }
+
   if (!endpoint) {
-    endpoint = 'http://localhost:3000/api/mcp/default/mcp';
+    endpoint = `${host}/api/mcp/default/mcp`;
   }
 
   const normalized = targetIde.toLowerCase();
@@ -45,6 +71,9 @@ export async function installCommand(
     console.log(`\n✅ Successfully installed '${serverName}' to ${targetIde}!`);
     console.log(`Config written to: ${result.path}`);
     console.log(`Endpoint:          ${endpoint}`);
+    if (apiKey) {
+      console.log(`Auth Header:       Bearer ${apiKey.slice(0, 10)}...`);
+    }
     console.log(`\nRestart your ${targetIde} application to begin using your live MCP tools.`);
   } else {
     console.error(`❌ Installation failed: ${result.error}`);

@@ -217,7 +217,7 @@ export default function DocsPage() {
                             {
                               mcpServers: {
                                 'web2mcp-server': {
-                                  url: 'https://web2mcp.com/api/mcp/YOUR_PROJECT_ID/mcp',
+                                  url: 'https://web2mcp.ssh.net.in/api/mcp/YOUR_PROJECT_ID/mcp',
                                   headers: {
                                     Authorization: 'Bearer YOUR_API_KEY',
                                   },
@@ -243,7 +243,7 @@ export default function DocsPage() {
 {`{
   "mcpServers": {
     "web2mcp-server": {
-      "url": "https://web2mcp.com/api/mcp/YOUR_PROJECT_ID/mcp",
+      "url": "https://web2mcp.ssh.net.in/api/mcp/YOUR_PROJECT_ID/mcp",
       "headers": {
         "Authorization": "Bearer YOUR_API_KEY"
       }
@@ -262,7 +262,7 @@ export default function DocsPage() {
                     <button
                       onClick={() =>
                         copyToClipboard(
-                          'claude mcp add --transport http web2mcp https://web2mcp.com/api/mcp/YOUR_PROJECT_ID/mcp',
+                          'claude mcp add --transport http web2mcp https://web2mcp.ssh.net.in/api/mcp/YOUR_PROJECT_ID/mcp',
                           'claude-cmd'
                         )
                       }
@@ -274,7 +274,7 @@ export default function DocsPage() {
                   </div>
                   <p className="text-xs text-[#50617A]">Run this command directly in your terminal:</p>
                   <pre className="p-3 bg-[#0A2540] text-amber-300 rounded-md text-xs font-mono overflow-x-auto">
-                    claude mcp add --transport http web2mcp https://web2mcp.com/api/mcp/YOUR_PROJECT_ID/mcp
+                    claude mcp add --transport http web2mcp https://web2mcp.ssh.net.in/api/mcp/YOUR_PROJECT_ID/mcp
                   </pre>
                 </div>
 

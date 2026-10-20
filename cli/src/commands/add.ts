@@ -6,8 +6,11 @@ import { executeProbe } from '../../../services/validation/probe-runner';
 import { recordEvidence } from '../../../services/validation/evidence-vault';
 import crypto from 'crypto';
 
-export async function addCommand(url: string, options: { name?: string; goal?: string; skipProbe?: boolean }) {
+const DEFAULT_HOST = (process.env.WEB2MCP_HOST || process.env.NEXT_PUBLIC_APP_URL || 'https://web2mcp.ssh.net.in').replace(/\/$/, '');
+
+export async function addCommand(url: string, options: { name?: string; goal?: string; host?: string; skipProbe?: boolean }) {
   await initDb();
+  const host = (options.host || DEFAULT_HOST).replace(/\/$/, '');
   console.log(`\n🚀 [Web2MCP] Exploring website: ${url}`);
   if (options.goal) {
     console.log(`🎯 Goal: ${options.goal}`);
@@ -81,7 +84,7 @@ export async function addCommand(url: string, options: { name?: string; goal?: s
   console.log(`Name:         ${projectName}`);
   console.log(`Target URL:   ${url}`);
   console.log(`API Key:      ${apiKey}`);
-  console.log(`MCP Endpoint: http://localhost:3000/api/mcp/${projectId}/mcp`);
+  console.log(`MCP Endpoint: ${host}/api/mcp/${projectId}/mcp`);
   console.log(`--------------------------------------------------------------------------------`);
   console.log(`Generated ${inferredTools.length} Live MCP Tools:`);
   for (const t of inferredTools) {
@@ -90,6 +93,6 @@ export async function addCommand(url: string, options: { name?: string; goal?: s
     console.log(`    ↳ ${t.description}`);
   }
   console.log(`\n💡 To connect to Cursor / Claude Desktop / VS Code, run:`);
-  console.log(`   web2mcp install cursor --project ${projectId}`);
-  console.log(`   web2mcp install claude --project ${projectId}`);
+  console.log(`   web2mcp install cursor --project ${projectId}${options.host ? ` --host ${options.host}` : ''}`);
+  console.log(`   web2mcp install claude --project ${projectId}${options.host ? ` --host ${options.host}` : ''}`);
 }

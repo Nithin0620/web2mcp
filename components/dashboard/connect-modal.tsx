@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Copy, Check } from 'lucide-react';
+import { Copy, Check, Globe, Laptop } from 'lucide-react';
 import { Button } from '../ui/button';
 
 interface ConnectModalProps {
@@ -11,15 +11,30 @@ interface ConnectModalProps {
   endpointUrl: string;
 }
 
+const PRODUCTION_HOST = process.env.NEXT_PUBLIC_APP_URL || 'https://web2mcp.ssh.net.in';
+
 export function ConnectModal({ projectId, projectName, apiKey, endpointUrl }: ConnectModalProps) {
   const [activeTab, setActiveTab] = useState<'cursor' | 'claude' | 'vscode' | 'cli'>('cursor');
   const [copied, setCopied] = useState(false);
+  const [useProduction, setUseProduction] = useState(true);
 
-  const fullEndpoint = typeof window !== 'undefined'
-    ? `${window.location.origin}${endpointUrl}`
-    : `http://localhost:3000${endpointUrl}`;
+  // Compute full endpoint URL based on production preference or active browser origin
+  const baseUrl = useProduction
+    ? PRODUCTION_HOST.replace(/\/$/, '')
+    : typeof window !== 'undefined'
+      ? window.location.origin
+      : 'http://localhost:3000';
 
-  const serverKey = `web2mcp-${projectName.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+  const fullEndpoint = `${baseUrl}${endpointUrl}`;
+
+  // Clean, concise server key slug without excessive hyphens
+  const cleanSlug = projectName
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 32);
+
+  const serverKey = `web2mcp-${cleanSlug || 'server'}`;
 
   const cursorJson = JSON.stringify(
     {
@@ -66,7 +81,7 @@ export function ConnectModal({ projectId, projectName, apiKey, endpointUrl }: Co
     2
   );
 
-  const cliCommand = `web2mcp install ${activeTab === 'vscode' ? 'vscode' : activeTab === 'claude' ? 'claude' : 'cursor'} --project ${projectId}`;
+  const cliCommand = `web2mcp install ${activeTab === 'vscode' ? 'vscode' : activeTab === 'claude' ? 'claude' : 'cursor'} --project ${projectId}${useProduction ? ` --host ${PRODUCTION_HOST}` : ''}`;
 
   const activeSnippet =
     activeTab === 'cursor' ? cursorJson : activeTab === 'claude' ? claudeJson : activeTab === 'vscode' ? vscodeJson : cliCommand;
@@ -88,6 +103,8 @@ export function ConnectModal({ projectId, projectName, apiKey, endpointUrl }: Co
             Use these MCP tools instantly in Claude Desktop, Cursor, or VS Code.
           </p>
         </div>
+
+        {/* Client Tabs */}
         <div className="flex items-center gap-1.5 bg-[#F8FAFD] p-1 rounded-md border border-[#E5EDF5]">
           {(['cursor', 'claude', 'vscode', 'cli'] as const).map((tab) => (
             <button
@@ -102,6 +119,39 @@ export function ConnectModal({ projectId, projectName, apiKey, endpointUrl }: Co
               {tab.toUpperCase()}
             </button>
           ))}
+        </div>
+      </div>
+
+      {/* Target Host Switcher (Production Domain vs Localhost) */}
+      <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs bg-[#F8FAFD] p-3 rounded-md border border-[#E5EDF5]">
+        <div className="flex items-center gap-2 text-[#50617A]">
+          <span className="font-semibold text-[#0A2540]">Server Host:</span>
+          <span className="font-mono text-[#533AFD] font-medium">{fullEndpoint}</span>
+        </div>
+
+        <div className="flex items-center gap-1.5 shrink-0 bg-white p-0.5 rounded border border-[#E5EDF5]">
+          <button
+            type="button"
+            onClick={() => setUseProduction(true)}
+            className={`px-2.5 py-1 rounded text-xs font-medium flex items-center gap-1 transition-all ${
+              useProduction
+                ? 'bg-[#533AFD] text-white shadow-sm'
+                : 'text-[#50617A] hover:text-[#0A2540]'
+            }`}
+          >
+            <Globe className="h-3 w-3" /> Production (web2mcp.ssh.net.in)
+          </button>
+          <button
+            type="button"
+            onClick={() => setUseProduction(false)}
+            className={`px-2.5 py-1 rounded text-xs font-medium flex items-center gap-1 transition-all ${
+              !useProduction
+                ? 'bg-[#533AFD] text-white shadow-sm'
+                : 'text-[#50617A] hover:text-[#0A2540]'
+            }`}
+          >
+            <Laptop className="h-3 w-3" /> Localhost
+          </button>
         </div>
       </div>
 
@@ -125,7 +175,7 @@ export function ConnectModal({ projectId, projectName, apiKey, endpointUrl }: Co
       </div>
 
       <div className="mt-4 flex items-center justify-between text-xs text-[#50617A] pt-3 border-t border-[#E5EDF5]">
-        <span>Bearer API Key: <code className="text-[#0A2540] bg-[#F8FAFD] px-1.5 py-0.5 rounded border border-[#E5EDF5]">{apiKey}</code></span>
+        <span>Bearer API Key: <code className="text-[#0A2540] bg-[#F8FAFD] px-1.5 py-0.5 rounded border border-[#E5EDF5] font-mono">{apiKey}</code></span>
         <span className="text-emerald-700 font-semibold flex items-center gap-1">● Live Streamable HTTP Ready</span>
       </div>
     </div>

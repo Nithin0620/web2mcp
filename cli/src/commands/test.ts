@@ -6,10 +6,21 @@ import type { GeneratedTool } from '../../../types/platform';
 export async function testCommand(toolIdentifier: string, options: { project?: string; params?: string }) {
   await initDb();
   const allTools = await db.select().from(tools);
-  const matched = allTools.find(t => t.name === toolIdentifier || t.id === toolIdentifier);
+  const matched = allTools.find(
+    (t) =>
+      (!options.project || t.projectId === options.project) &&
+      (t.name === toolIdentifier || t.id === toolIdentifier)
+  );
 
   if (!matched) {
     console.error(`❌ Tool '${toolIdentifier}' not found.`);
+    const matchingPool = options.project
+      ? allTools.filter((t) => t.projectId === options.project)
+      : allTools;
+    const available = matchingPool.map((t) => t.name).slice(0, 10).join(', ');
+    if (available) {
+      console.log(`Available tools: ${available}`);
+    }
     process.exit(1);
   }
 

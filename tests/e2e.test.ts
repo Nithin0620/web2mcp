@@ -108,12 +108,13 @@ describe('Web2MCP End-to-End System Test', () => {
   it('Pipeline Step 3: Executes live validation probes and archives evidence', async () => {
     const projectTools = await db.select().from(tools).where(eq(tools.projectId, e2eProjectId));
     const searchToolRow = projectTools.find((t) => t.category === 'search');
+    expect(searchToolRow).toBeDefined();
 
     const searchTool = {
-      ...searchToolRow,
-      parameters: JSON.parse(searchToolRow.parameters),
-      handlerConfig: JSON.parse(searchToolRow.handlerConfig),
-      requiresApproval: Boolean(searchToolRow.requiresApproval),
+      ...searchToolRow!,
+      parameters: JSON.parse(searchToolRow!.parameters),
+      handlerConfig: JSON.parse(searchToolRow!.handlerConfig),
+      requiresApproval: Boolean(searchToolRow!.requiresApproval),
     };
 
     const probeResult = await executeProbe(searchTool as any);
@@ -121,8 +122,8 @@ describe('Web2MCP End-to-End System Test', () => {
 
     const recorded = await recordEvidence({
       projectId: e2eProjectId,
-      toolId: searchTool.id,
-      toolName: searchTool.name,
+      toolId: searchTool.id!,
+      toolName: searchTool.name!,
       probeInput: probeResult.input,
       sampleOutput: probeResult.output,
       domHash: probeResult.domHash,

@@ -1,4 +1,3 @@
-import { TinyFish, RunStatus } from '@tiny-fish/sdk';
 import type { PageExplorationResult } from '../../types/platform';
 import { extractForms, extractListContainers } from './form-extractor';
 import { htmlToMarkdown, cleanHtml } from './html-cleaner';
@@ -8,31 +7,43 @@ export interface TinyFishConfig {
 }
 
 export class TinyFishClient {
-  private client: TinyFish | null = null;
+  private client: any = null;
   private apiKey: string | null = null;
 
   constructor(config?: TinyFishConfig) {
     const rawKey = config?.apiKey || process.env.TINYFISH_API_KEY || null;
     if (rawKey) {
       this.apiKey = rawKey.replace(/^[=\s"']+/, '').replace(/[\s"']+$/, '');
-      if (this.apiKey.length > 0) {
-        this.client = new TinyFish({
-          apiKey: this.apiKey,
-        });
-      }
     }
   }
 
   isConfigured(): boolean {
-    return Boolean(this.client && this.apiKey && this.apiKey.trim().length > 0);
+    return Boolean(this.apiKey && this.apiKey.trim().length > 0);
+  }
+
+  private async getClient(): Promise<any> {
+    if (this.client) return this.client;
+    if (!this.apiKey) return null;
+    try {
+      const { TinyFish } = await import('@tiny-fish/sdk');
+      this.client = new TinyFish({
+        apiKey: this.apiKey,
+      });
+      return this.client;
+    } catch (err) {
+      console.warn('[TinyFish] Failed to initialize TinyFish SDK:', err);
+      return null;
+    }
   }
 
   async explore(url: string, goal?: string): Promise<PageExplorationResult | null> {
-    if (!this.client) {
+    const client = await this.getClient();
+    if (!client) {
       return null;
     }
 
     try {
+      const { RunStatus } = await import('@tiny-fish/sdk');
       // 1. Try TinyFish Autonomous Agent Run
       const agentGoal = goal || `
         Explore this website at ${url}.
@@ -40,7 +51,7 @@ export class TinyFishClient {
         Extract form input names, search parameters, action endpoints, and sample listing items.
       `.trim();
 
-      const run = await this.client.agent.run({
+      const run = await client.agent.run({
         url,
         goal: agentGoal,
       });
@@ -71,7 +82,7 @@ export class TinyFishClient {
       }
 
       // 2. Fallback to TinyFish Direct Fetch if agent run did not return completed structured data
-      const fetchResult = await this.client.fetch.getContents({
+      const fetchResult = await client.fetch.getContents({
         urls: [url],
       });
 
