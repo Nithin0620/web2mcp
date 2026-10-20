@@ -8,6 +8,20 @@ import type {
 import { classifyToolSafety } from './safety-classifier';
 import { AIAnalyzer } from './analyzer';
 
+export function pluralize(word: string): string {
+  const lower = word.toLowerCase();
+  if (lower.endsWith('news') || lower.endsWith('series') || lower.endsWith('species')) {
+    return word;
+  }
+  if (lower.endsWith('s') || lower.endsWith('sh') || lower.endsWith('ch') || lower.endsWith('x') || lower.endsWith('z')) {
+    return word;
+  }
+  if (lower.endsWith('y') && !/[aeiou]y$/i.test(lower)) {
+    return word.slice(0, -1) + 'ies';
+  }
+  return word + 's';
+}
+
 function inferEntityName(url: string, title: string, siteType?: string): string {
   if (siteType === 'travel_flight_booking') return 'flight';
   if (siteType === 'careers_job_board') return 'job';
@@ -99,8 +113,9 @@ export async function inferToolsFromExploration(
     };
 
     if (isSearchForm) {
-      const toolName = `search_${entity}s`;
-      const description = `Search and filter ${entity}s on ${exploration.title} matching provided criteria.`;
+      const plural = pluralize(entity);
+      const toolName = `search_${plural}`;
+      const description = `Search and filter ${plural} on ${exploration.title} matching provided criteria.`;
       const safety = classifyToolSafety(toolName, description);
 
       tools.push({
@@ -182,7 +197,8 @@ export async function inferToolsFromExploration(
 
   // If no search tool was generated from forms, generate a default portal search tool
   if (!tools.some(t => t.category === 'search')) {
-    const fallbackSearchName = `search_${entity}s`;
+    const plural = pluralize(entity);
+    const fallbackSearchName = `search_${plural}`;
     const fallbackDesc = `Search ${exploration.title} catalog with keyword and category queries.`;
     const fallbackSafety = classifyToolSafety(fallbackSearchName, fallbackDesc);
 
@@ -197,7 +213,7 @@ export async function inferToolsFromExploration(
         properties: {
           query: {
             type: 'string',
-            description: `Search keyword for ${entity}s`,
+            description: `Search keyword for ${plural}`,
           },
           category: {
             type: 'string',

@@ -180,6 +180,16 @@ export async function handleMCPRequest(
           errorMessage: probeResult.errorMessage,
         });
 
+        const isFailed = probeResult.status === 'failed';
+        const formattedContent =
+          probeResult.output !== null && probeResult.output !== undefined
+            ? typeof probeResult.output === 'string'
+              ? probeResult.output
+              : JSON.stringify(probeResult.output, null, 2)
+            : probeResult.errorMessage
+            ? `Tool execution failed: ${probeResult.errorMessage}`
+            : `Tool '${generatedTool.name}' produced no output.`;
+
         return {
           jsonrpc: '2.0',
           id,
@@ -187,12 +197,10 @@ export async function handleMCPRequest(
             content: [
               {
                 type: 'text',
-                text: typeof probeResult.output === 'string'
-                  ? probeResult.output
-                  : JSON.stringify(probeResult.output, null, 2),
+                text: formattedContent,
               },
             ],
-            isError: probeResult.status === 'failed',
+            isError: isFailed,
           },
         };
       }
