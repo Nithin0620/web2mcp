@@ -7,6 +7,7 @@ import {
   ExternalLink,
   ArrowRight,
 } from 'lucide-react';
+import { Reveal } from '@/components/ui/reveal';
 
 const PRESETS = [
   {
@@ -68,97 +69,103 @@ const GUIDES = [
 
 export default function ResourcesPage() {
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12 lg:py-16 space-y-16 bg-white text-[#061B31]">
+    <div className="max-w-7xl mx-auto px-4 py-12 lg:py-16 space-y-16 bg-white text-[#061B31] overflow-hidden">
       {/* Header */}
-      <div className="max-w-3xl space-y-4">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D6D9FC]/30 border border-[#D6D9FC] text-[#533AFD] text-xs font-semibold shadow-[0_1px_2px_rgba(50,50,93,0.04)]">
-          <Boxes className="h-3.5 w-3.5" />
-          <span>Ecosystem & Presets</span>
+      <Reveal animation="fade-down" delay={50}>
+        <div className="max-w-3xl space-y-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D6D9FC]/30 border border-[#D6D9FC] text-[#533AFD] text-xs font-semibold shadow-[0_1px_2px_rgba(50,50,93,0.04)] animate-shimmer">
+            <Boxes className="h-3.5 w-3.5" />
+            <span>Ecosystem & Presets</span>
+          </div>
+          <h1 className="text-4xl font-bold text-[#0A2540] tracking-tight">
+            Web2MCP Resources & Presets Library
+          </h1>
+          <p className="text-[#50617A] text-sm leading-relaxed">
+            Pre-built MCP tool templates, developer guides, and architecture references for integrating web capabilities into your agentic workflow.
+          </p>
         </div>
-        <h1 className="text-4xl font-bold text-[#0A2540] tracking-tight">
-          Web2MCP Resources & Presets Library
-        </h1>
-        <p className="text-[#50617A] text-sm leading-relaxed">
-          Pre-built MCP tool templates, developer guides, and architecture references for integrating web capabilities into your agentic workflow.
-        </p>
-      </div>
+      </Reveal>
 
       {/* Pre-built MCP Presets Catalog */}
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-xl font-bold text-[#0A2540]">Pre-configured MCP Presets</h2>
-            <p className="text-xs text-[#50617A]">Launch a live server from these popular website patterns with one click.</p>
+        <Reveal animation="fade-up" delay={100}>
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-bold text-[#0A2540]">Pre-configured MCP Presets</h2>
+              <p className="text-xs text-[#50617A]">Launch a live server from these popular website patterns with one click.</p>
+            </div>
           </div>
-        </div>
+        </Reveal>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {PRESETS.map((preset) => (
-            <div
-              key={preset.name}
-              className="p-6 rounded-lg bg-white border border-[#E5EDF5] hover:border-[#CFD8E3] hover:shadow-[0_4px_8px_rgba(50,50,93,0.06)] transition-all flex flex-col justify-between space-y-4 shadow-[0_2px_4px_rgba(50,50,93,0.04)]"
-            >
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#F8FAFD] text-[#50617A] border border-[#E5EDF5]">
-                    {preset.category}
-                  </span>
-                  <span className="text-xs font-mono text-[#64748D] truncate max-w-[180px]">{preset.url}</span>
-                </div>
-
-                <h3 className="font-bold text-[#0A2540] text-base">{preset.name}</h3>
-                <p className="text-xs text-[#3C4F69] leading-relaxed">{preset.description}</p>
-
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {preset.tools.map((t) => (
-                    <span
-                      key={t}
-                      className="px-2 py-0.5 rounded bg-[#F8FAFD] text-[#533AFD] font-mono text-[10px] border border-[#D6D9FC]"
-                    >
-                      {t}()
+          {PRESETS.map((preset, idx) => (
+            <Reveal key={preset.name} animation="fade-up" delay={idx * 100 + 150}>
+              <div className="p-6 rounded-lg bg-white border border-[#E5EDF5] hover:border-[#533AFD] stripe-hover-card flex flex-col justify-between space-y-4 shadow-[0_2px_4px_rgba(50,50,93,0.04)] h-full">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#F8FAFD] text-[#50617A] border border-[#E5EDF5]">
+                      {preset.category}
                     </span>
-                  ))}
-                </div>
-              </div>
+                    <span className="text-xs font-mono text-[#64748D] truncate max-w-[180px]">{preset.url}</span>
+                  </div>
 
-              <Link
-                href={`/projects/new?url=${encodeURIComponent(preset.url)}`}
-                className="w-full py-2.5 px-4 bg-[#F8FAFD] hover:bg-[#EEF2F6] text-[#0A2540] rounded-md text-xs font-semibold flex items-center justify-center gap-2 transition-colors border border-[#E5EDF5] shadow-[0_1px_2px_rgba(50,50,93,0.04)]"
-              >
-                Use Preset in Generator <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
+                  <h3 className="font-bold text-[#0A2540] text-base">{preset.name}</h3>
+                  <p className="text-xs text-[#3C4F69] leading-relaxed">{preset.description}</p>
+
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {preset.tools.map((t) => (
+                      <span
+                        key={t}
+                        className="px-2 py-0.5 rounded bg-[#F8FAFD] text-[#533AFD] font-mono text-[10px] border border-[#D6D9FC]"
+                      >
+                        {t}()
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <Link
+                  href={`/projects/new?url=${encodeURIComponent(preset.url)}`}
+                  className="w-full py-2.5 px-4 bg-[#F8FAFD] hover:bg-[#EEF2F6] text-[#0A2540] rounded-md text-xs font-semibold flex items-center justify-center gap-2 transition-colors border border-[#E5EDF5] shadow-[0_1px_2px_rgba(50,50,93,0.04)]"
+                >
+                  Use Preset in Generator <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+            </Reveal>
           ))}
         </div>
       </div>
 
       {/* Technical Guides & Documentation */}
       <div className="space-y-6 pt-6 border-t border-[#E5EDF5]">
-        <div>
-          <h2 className="text-xl font-bold text-[#0A2540]">Guides & External References</h2>
-          <p className="text-xs text-[#50617A]">Documentation and official specifications for agents and protocols.</p>
-        </div>
+        <Reveal animation="fade-up" delay={100}>
+          <div>
+            <h2 className="text-xl font-bold text-[#0A2540]">Guides & External References</h2>
+            <p className="text-xs text-[#50617A]">Documentation and official specifications for agents and protocols.</p>
+          </div>
+        </Reveal>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {GUIDES.map((guide) => (
-            <a
-              key={guide.title}
-              href={guide.link}
-              target={guide.link.startsWith('http') ? '_blank' : '_self'}
-              rel="noreferrer"
-              className="p-5 rounded-lg bg-white border border-[#E5EDF5] hover:border-[#CFD8E3] hover:shadow-[0_4px_8px_rgba(50,50,93,0.06)] transition-all block group shadow-[0_1px_2px_rgba(50,50,93,0.04)]"
-            >
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[10px] uppercase font-semibold text-[#533AFD] bg-[#D6D9FC]/40 px-2 py-0.5 rounded-full border border-[#D6D9FC]">
-                  {guide.badge}
-                </span>
-                <ExternalLink className="h-4 w-4 text-[#94A3B8] group-hover:text-[#533AFD] transition-colors" />
-              </div>
-              <h3 className="font-semibold text-[#0A2540] text-sm group-hover:text-[#533AFD] transition-colors">
-                {guide.title}
-              </h3>
-              <p className="text-xs text-[#50617A] mt-1 leading-relaxed">{guide.description}</p>
-            </a>
+          {GUIDES.map((guide, idx) => (
+            <Reveal key={guide.title} animation="fade-up" delay={idx * 100 + 150}>
+              <a
+                href={guide.link}
+                target={guide.link.startsWith('http') ? '_blank' : '_self'}
+                rel="noreferrer"
+                className="p-5 rounded-lg bg-white border border-[#E5EDF5] hover:border-[#533AFD] stripe-hover-card block group shadow-[0_1px_2px_rgba(50,50,93,0.04)] h-full"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] uppercase font-semibold text-[#533AFD] bg-[#D6D9FC]/40 px-2 py-0.5 rounded-full border border-[#D6D9FC]">
+                    {guide.badge}
+                  </span>
+                  <ExternalLink className="h-4 w-4 text-[#94A3B8] group-hover:text-[#533AFD] group-hover:translate-x-0.5 transition-all" />
+                </div>
+                <h3 className="font-semibold text-[#0A2540] text-sm group-hover:text-[#533AFD] transition-colors">
+                  {guide.title}
+                </h3>
+                <p className="text-xs text-[#50617A] mt-1 leading-relaxed">{guide.description}</p>
+              </a>
+            </Reveal>
           ))}
         </div>
       </div>
