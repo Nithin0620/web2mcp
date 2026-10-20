@@ -119,7 +119,7 @@ export default function NewProjectPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12 space-y-8 bg-white text-[#061B31]">
+    <div className="max-w-4xl mx-auto px-4 py-12 space-y-8 bg-transparent text-[#061B31] dark:text-[#F8FAFC]">
       {/* Credits Status Banner */}
       {!authenticated ? (
         <div className="p-4 rounded-lg bg-[#F8FAFD] border border-[#E5EDF5] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs shadow-[0_1px_2px_rgba(50,50,93,0.04)]">

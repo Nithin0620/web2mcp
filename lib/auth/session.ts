@@ -56,7 +56,7 @@ export async function createAnonymousSession(): Promise<{ id: string; creditsRem
 export async function getOrCreateAnonymousSession(existingId?: string): Promise<{ id: string; creditsRemaining: number }> {
   await initDb();
   if (existingId) {
-    const [row] = await db.select().from(anonymousSessions).where(eq(anonymousSessions.id, existingId)).all();
+    const [row] = await db.select().from(anonymousSessions).where(eq(anonymousSessions.id, existingId));
     if (row) {
       return { id: row.id, creditsRemaining: row.creditsRemaining };
     }
@@ -91,15 +91,13 @@ export async function getSessionFromTokens(
     const [session] = await db
       .select()
       .from(userSessions)
-      .where(eq(userSessions.id, userSessionToken))
-      .all();
+      .where(eq(userSessions.id, userSessionToken));
 
     if (session && session.expiresAt > new Date()) {
       const [user] = await db
         .select()
         .from(users)
-        .where(eq(users.id, session.userId))
-        .all();
+        .where(eq(users.id, session.userId));
 
       if (user) {
         return {
@@ -182,7 +180,7 @@ export async function upgradeUserTier(
 ): Promise<{ success: boolean; newCredits: number; tier: string }> {
   await initDb();
 
-  const [user] = await db.select().from(users).where(eq(users.id, userId)).all();
+  const [user] = await db.select().from(users).where(eq(users.id, userId));
   if (!user) throw new Error('User not found');
 
   const newCredits = user.creditsRemaining + additionalCredits;

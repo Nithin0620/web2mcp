@@ -106,12 +106,6 @@ export async function handleMCPRequest(
           };
         }
 
-        const [toolRow] = await db
-          .select()
-          .from(tools)
-          .where(eq(tools.projectId, projectId))
-          .all();
-
         const allTools = await db.select().from(tools).where(eq(tools.projectId, projectId));
         const matched = allTools.find(t => t.name === name);
 

@@ -36,7 +36,7 @@ export default function DocsPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-10 lg:py-16 bg-white text-[#061B31] overflow-hidden">
+    <div className="max-w-7xl mx-auto px-4 py-10 lg:py-16 bg-transparent text-[#061B31] dark:text-[#F8FAFC] overflow-hidden">
       <div className="flex flex-col lg:flex-row gap-10">
         {/* Sticky Sidebar Navigation */}
         <aside className="lg:w-64 shrink-0">

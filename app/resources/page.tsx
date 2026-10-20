@@ -69,7 +69,7 @@ const GUIDES = [
 
 export default function ResourcesPage() {
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12 lg:py-16 space-y-16 bg-white text-[#061B31] overflow-hidden">
+    <div className="max-w-7xl mx-auto px-4 py-12 lg:py-16 space-y-16 bg-transparent text-[#061B31] dark:text-[#F8FAFC] overflow-hidden">
       {/* Header */}
       <Reveal animation="fade-down" delay={50}>
         <div className="max-w-3xl space-y-4">

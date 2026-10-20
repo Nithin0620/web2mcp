@@ -38,7 +38,7 @@ export default async function HomePage() {
   const displayProjects = cleanProjects.length > 0 ? cleanProjects : allProjects.slice(0, 6);
 
   return (
-    <div className="space-y-24 pb-28 bg-white text-[#061B31] overflow-hidden">
+    <div className="space-y-24 pb-28 bg-transparent text-[#061B31] dark:text-[#F8FAFC] overflow-hidden">
       {/* Stripe Hero Section with Ambient Floating Gradients */}
       <section className="relative pt-24 pb-20 overflow-hidden border-b border-[#E5EDF5] bg-gradient-to-b from-[#F8FAFD] via-white to-white">
         {/* Ambient floating mesh orbs */}

@@ -62,7 +62,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
   }));
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-10 space-y-6 bg-white text-[#061B31]">
+    <div className="max-w-7xl mx-auto px-4 py-10 space-y-6 bg-transparent text-[#061B31] dark:text-[#F8FAFC]">
       {/* Top Navigation & Breadcrumb */}
       <div className="flex items-center justify-between">
         <Link

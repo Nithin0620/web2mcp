@@ -12,6 +12,17 @@
   --border: #e5edf5;
 }
 
+.dark {
+  --background: #0a0f1d;
+  --foreground: #f8fafc;
+  --card: #111827;
+  --card-foreground: #f8fafc;
+  --muted: #0b1120;
+  --muted-foreground: #94a3b8;
+  --border: #1e293b;
+  color-scheme: dark;
+}
+
 /* Lenis Smooth Inertial Scrolling CSS */
 html.lenis,
 html.lenis body {
@@ -172,3 +183,417 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 13px 27px -5px rgba(50, 50, 93, 0.12), 0 8px 16px -8px rgba(0, 0, 0, 0.08);
   border-color: #cfd8e3;
 }
+
+/* ============================================================
+   CURTAIN FALL THEME SWITCH ANIMATION (TOP TO BOTTOM)
+   ============================================================ */
+
+::view-transition-group(root) {
+  animation-duration: 0.7s;
+}
+
+::view-transition-old(root) {
+  animation: none;
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  animation: curtain-drop 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  z-index: 9999;
+}
+
+@keyframes curtain-drop {
+  0% {
+    clip-path: inset(0 0 100% 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Glowing leading edge bar that leads the falling curtain */
+.curtain-leading-edge {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #533AFD 0%, #7928CA 30%, #635BFF 50%, #00D4FF 75%, #533AFD 100%);
+  background-size: 200% 100%;
+  box-shadow: 0 4px 20px 3px rgba(99, 91, 255, 0.8), 0 2px 10px rgba(0, 0, 0, 0.5);
+  z-index: 100000;
+  pointer-events: none;
+  animation: curtain-edge-sweep 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes curtain-edge-sweep {
+  0% {
+    top: 0;
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  6% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  100% {
+    top: 100vh;
+    opacity: 0;
+    transform: translateY(0%);
+  }
+}
+
+/* Fallback curtain sweep sheet for browsers without View Transitions */
+.curtain-sheet-fallback {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999;
+  pointer-events: none;
+  animation: curtain-sheet-motion 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.curtain-sheet-fallback.theme-to-dark {
+  background: linear-gradient(to bottom, #111827, #0A0F1D);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.curtain-sheet-fallback.theme-to-light {
+  background: linear-gradient(to bottom, #FFFFFF, #F8FAFD);
+  box-shadow: 0 20px 50px rgba(83, 58, 253, 0.2);
+}
+
+@keyframes curtain-sheet-motion {
+  0% {
+    transform: translateY(-100%);
+  }
+  50% {
+    transform: translateY(0%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+/* ============================================================
+   DARK THEME STYLES & OVERRIDES
+   ============================================================ */
+
+.dark {
+  --background: #0A0F1D;
+  --foreground: #F8FAFC;
+  --card: #111827;
+  --card-foreground: #F8FAFC;
+  --muted: #0F172A;
+  --muted-foreground: #94A3B8;
+  --border: #1E293B;
+  color-scheme: dark;
+}
+
+.dark body {
+  background-color: #0A0F1D !important;
+  color: #F8FAFC !important;
+}
+
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6 {
+  color: #F8FAFC !important;
+}
+
+/* Radiant, high-contrast light violet text for dark mode */
+.dark .text-\[\#533AFD\] {
+  color: #818CF8 !important;
+}
+
+.dark .hover\:text-\[\#533AFD\]:hover {
+  color: #A5B4FC !important;
+}
+
+.dark .border-\[\#533AFD\] {
+  border-color: #818CF8 !important;
+}
+
+.dark .hover\:border-\[\#533AFD\]:hover {
+  border-color: #A5B4FC !important;
+}
+
+/* Hero gradient text replacement for dark mode */
+.dark .bg-gradient-to-r.from-\[\#533AFD\].via-\[\#635BFF\].to-\[\#2E2B8C\] {
+  background-image: linear-gradient(to right, #818CF8, #A78BFA, #60A5FA) !important;
+}
+
+/* Card and surface background overrides */
+.dark .bg-white {
+  background-color: #111827 !important;
+}
+
+.dark .bg-\[\#F8FAFD\],
+.dark .bg-\[\#FAFBFD\] {
+  background-color: #0F172A !important;
+}
+
+.dark .bg-\[\#EEF2F6\],
+.dark .bg-\[\#E5EDF5\] {
+  background-color: #1E293B !important;
+}
+
+/* Translucent soft purple/indigo badges & highlights */
+.dark .bg-\[\#D6D9FC\],
+.dark .bg-\[\#D6D9FC\]\/40,
+.dark .bg-\[\#D6D9FC\]\/30,
+.dark .bg-\[\#D6D9FC\]\/50 {
+  background-color: rgba(99, 102, 241, 0.18) !important;
+  color: #818CF8 !important;
+  border-color: rgba(129, 140, 248, 0.35) !important;
+}
+
+.dark .bg-\[\#533AFD\]\/10 {
+  background-color: rgba(129, 140, 248, 0.16) !important;
+  color: #818CF8 !important;
+}
+
+.dark .bg-\[\#533AFD\]\/5 {
+  background-color: rgba(129, 140, 248, 0.08) !important;
+}
+
+.dark .bg-\[\#635BFF\]\/5 {
+  background-color: rgba(167, 139, 250, 0.08) !important;
+}
+
+/* Border overrides */
+.dark .border-\[\#E5EDF5\] {
+  border-color: #1E293B !important;
+}
+
+.dark .border-\[\#D6D9FC\] {
+  border-color: #312E81 !important;
+}
+
+.dark .hover\:border-\[\#CFD8E3\]:hover {
+  border-color: #334155 !important;
+}
+
+.dark .hover\:border-\[\#D6D9FC\]:hover {
+  border-color: #6366F1 !important;
+}
+
+/* Text overrides */
+.dark .text-\[\#061B31\],
+.dark .text-\[\#0A2540\] {
+  color: #F8FAFC !important;
+}
+
+.dark .text-\[\#1A2C44\],
+.dark .text-\[\#273951\],
+.dark .text-\[\#3C4F69\] {
+  color: #CBD5E1 !important;
+}
+
+.dark .text-\[\#50617A\],
+.dark .text-\[\#64748D\] {
+  color: #94A3B8 !important;
+}
+
+/* Interactive elements */
+.dark .hover\:bg-\[\#F8FAFD\]:hover {
+  background-color: #1E293B !important;
+}
+
+.dark .hover\:bg-\[\#EEF2F6\]:hover {
+  background-color: #27354D !important;
+}
+
+/* Gradient card overrides (e.g. Dashboard metric cards, Pricing cards, Hero section) */
+.dark .bg-gradient-to-br.from-white.to-\[\#F8FAFD\] {
+  background-image: linear-gradient(to bottom right, #111827, #0F172A) !important;
+}
+
+.dark .bg-gradient-to-b.from-\[\#F8FAFD\].to-white {
+  background-image: linear-gradient(to bottom, #0F172A, #111827) !important;
+}
+
+.dark .bg-gradient-to-b.from-\[\#F8FAFD\].via-white.to-white {
+  background-image: linear-gradient(to bottom, #070B14, #0A0F1D, #0A0F1D) !important;
+}
+
+.dark .from-white {
+  --tw-gradient-from: #111827 var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgba(17, 24, 39, 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+.dark .to-white {
+  --tw-gradient-to: #111827 var(--tw-gradient-to-position) !important;
+}
+
+.dark .via-white {
+  --tw-gradient-to: rgba(17, 24, 39, 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), #111827 var(--tw-gradient-via-position), var(--tw-gradient-to) !important;
+}
+
+.dark .from-\[\#F8FAFD\] {
+  --tw-gradient-from: #0F172A var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgba(15, 23, 42, 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+.dark .to-\[\#F8FAFD\] {
+  --tw-gradient-to: #0F172A var(--tw-gradient-to-position) !important;
+}
+
+/* Table headers & rows */
+.dark thead.bg-\[\#F8FAFD\] {
+  background-color: #0F172A !important;
+  color: #F8FAFC !important;
+}
+
+.dark tr.hover\:bg-\[\#F8FAFD\]\/50:hover,
+.dark tr.hover\:bg-\[\#F8FAFD\]:hover,
+.dark div.hover\:bg-\[\#F8FAFD\]:hover {
+  background-color: rgba(30, 41, 59, 0.6) !important;
+}
+
+/* Secondary dark buttons & cards */
+.dark .bg-\[\#0A2540\]:not(pre) {
+  background-color: #1E293B !important;
+  color: #F8FAFC !important;
+}
+
+.dark .hover\:bg-\[\#1A2C44\]:hover {
+  background-color: #334155 !important;
+}
+
+/* Code & pre blocks */
+.dark code {
+  background-color: #1E293B !important;
+  color: #A5B4FC !important;
+  border-color: #334155 !important;
+}
+
+.dark pre.bg-\[\#0A2540\] {
+  background-color: #070B14 !important;
+  border: 1px solid #1E293B !important;
+}
+
+.dark pre.bg-\[\#061B31\] {
+  background-color: #050811 !important;
+  border: 1px solid #1E293B !important;
+}
+
+/* Amber / warning alerts */
+.dark .bg-amber-50,
+.dark .bg-amber-50\/70,
+.dark .bg-amber-50\/80,
+.dark .bg-amber-50\/50 {
+  background-color: rgba(120, 53, 15, 0.22) !important;
+}
+
+.dark .bg-amber-100 {
+  background-color: rgba(146, 64, 14, 0.3) !important;
+}
+
+.dark .border-amber-200,
+.dark .border-amber-300 {
+  border-color: rgba(245, 158, 11, 0.3) !important;
+}
+
+.dark .text-amber-700,
+.dark .text-amber-800 {
+  color: #FCD34D !important;
+}
+
+/* Emerald / success alerts */
+.dark .bg-emerald-50 {
+  background-color: rgba(6, 78, 59, 0.28) !important;
+}
+
+.dark .border-emerald-200 {
+  border-color: rgba(16, 185, 129, 0.3) !important;
+}
+
+.dark .text-emerald-700,
+.dark .text-emerald-800 {
+  color: #6EE7B7 !important;
+}
+
+/* Rose / destructive alerts */
+.dark .bg-rose-50 {
+  background-color: rgba(136, 19, 55, 0.28) !important;
+}
+
+.dark .border-rose-200 {
+  border-color: rgba(244, 63, 94, 0.3) !important;
+}
+
+.dark .text-rose-700 {
+  color: #FDA4AF !important;
+}
+
+/* Cyan badges */
+.dark .bg-cyan-50 {
+  background-color: rgba(22, 78, 99, 0.28) !important;
+}
+
+.dark .border-cyan-200 {
+  border-color: rgba(6, 182, 212, 0.3) !important;
+}
+
+.dark .text-cyan-700 {
+  color: #67E8F9 !important;
+}
+
+/* Inputs, textareas, selects */
+.dark input:not([type='checkbox']):not([type='radio']),
+.dark textarea,
+.dark select {
+  background-color: #0F172A !important;
+  border-color: #1E293B !important;
+  color: #F8FAFC !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #64748B !important;
+}
+
+/* Dark scrollbars */
+.dark ::-webkit-scrollbar-track {
+  background: #0A0F1D;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #1E293B;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Dark card hover glow */
+.dark .stripe-hover-card {
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dark .dark .stripe-hover-card:hover {
+  box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.7) !important;
+  border-color: #635BFF !important;
+}
+
+/* Subdued shimmer in dark mode */
+.dark .animate-shimmer::after {
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.08) 20%,
+    rgba(255, 255, 255, 0.16) 60%,
+    rgba(255, 255, 255, 0)
+  ) !important;
+}
+

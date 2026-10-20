@@ -50,7 +50,7 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-16 lg:py-20 space-y-16 bg-white text-[#061B31] overflow-hidden">
+    <div className="max-w-7xl mx-auto px-4 py-16 lg:py-20 space-y-16 bg-transparent text-[#061B31] dark:text-[#F8FAFC] overflow-hidden">
       {/* Header */}
       <Reveal animation="fade-down" delay={50}>
         <div className="text-center max-w-3xl mx-auto space-y-4">

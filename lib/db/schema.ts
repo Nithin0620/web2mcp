@@ -1,17 +1,30 @@
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
+import { pgTable, text, integer, boolean, timestamp } from 'drizzle-orm/pg-core';
 
-export const projects = sqliteTable('projects', {
+export const users = pgTable('users', {
+  id: text('id').primaryKey(),
+  email: text('email').notNull().unique(),
+  name: text('name').notNull(),
+  passwordHash: text('password_hash').notNull(),
+  tier: text('tier').notNull().default('free'), // 'free' | 'starter' | 'pro' | 'enterprise'
+  creditsRemaining: integer('credits_remaining').notNull().default(10),
+  creditsUsed: integer('credits_used').notNull().default(0),
+  createdAt: timestamp('created_at').notNull(),
+  updatedAt: timestamp('updated_at').notNull(),
+});
+
+export const projects = pgTable('projects', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
   targetUrl: text('target_url').notNull(),
   goal: text('goal'),
   status: text('status').notNull().default('idle'),
   apiKey: text('api_key').notNull(),
-  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),
+  userId: text('user_id').references(() => users.id, { onDelete: 'set null' }),
+  createdAt: timestamp('created_at').notNull(),
+  updatedAt: timestamp('updated_at').notNull(),
 });
 
-export const tools = sqliteTable('tools', {
+export const tools = pgTable('tools', {
   id: text('id').primaryKey(),
   projectId: text('project_id')
     .notNull()
@@ -22,14 +35,14 @@ export const tools = sqliteTable('tools', {
   parameters: text('parameters').notNull(), // JSON string
   handlerType: text('handler_type').notNull().default('selector'),
   handlerConfig: text('handler_config').notNull().default('{}'), // JSON string
-  requiresApproval: integer('requires_approval', { mode: 'boolean' }).notNull().default(false),
+  requiresApproval: boolean('requires_approval').notNull().default(false),
   riskLevel: text('risk_level').notNull().default('read_only'),
   status: text('status').notNull().default('active'),
-  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),
+  createdAt: timestamp('created_at').notNull(),
+  updatedAt: timestamp('updated_at').notNull(),
 });
 
-export const evidence = sqliteTable('evidence', {
+export const evidence = pgTable('evidence', {
   id: text('id').primaryKey(),
   projectId: text('project_id')
     .notNull()
@@ -43,36 +56,24 @@ export const evidence = sqliteTable('evidence', {
   status: text('status').notNull().default('verified'),
   latencyMs: integer('latency_ms').notNull().default(0),
   errorMessage: text('error_message'),
-  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+  createdAt: timestamp('created_at').notNull(),
 });
 
-export const users = sqliteTable('users', {
-  id: text('id').primaryKey(),
-  email: text('email').notNull().unique(),
-  name: text('name').notNull(),
-  passwordHash: text('password_hash').notNull(),
-  tier: text('tier').notNull().default('free'), // 'free' | 'starter' | 'pro' | 'enterprise'
-  creditsRemaining: integer('credits_remaining').notNull().default(10),
-  creditsUsed: integer('credits_used').notNull().default(0),
-  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),
-});
-
-export const anonymousSessions = sqliteTable('anonymous_sessions', {
+export const anonymousSessions = pgTable('anonymous_sessions', {
   id: text('id').primaryKey(),
   creditsRemaining: integer('credits_remaining').notNull().default(3),
   creditsUsed: integer('credits_used').notNull().default(0),
-  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),
+  createdAt: timestamp('created_at').notNull(),
+  updatedAt: timestamp('updated_at').notNull(),
 });
 
-export const userSessions = sqliteTable('user_sessions', {
+export const userSessions = pgTable('user_sessions', {
   id: text('id').primaryKey(),
   userId: text('user_id')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
-  expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
-  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+  expiresAt: timestamp('expires_at').notNull(),
+  createdAt: timestamp('created_at').notNull(),
 });
 
 export type ProjectRow = typeof projects.$inferSelect;

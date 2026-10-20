@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     }
 
     const cleanEmail = String(email).trim().toLowerCase();
-    const [user] = await db.select().from(users).where(eq(users.email, cleanEmail)).all();
+    const [user] = await db.select().from(users).where(eq(users.email, cleanEmail));
 
     if (!user || !verifyPassword(String(password), user.passwordHash)) {
       return NextResponse.json(

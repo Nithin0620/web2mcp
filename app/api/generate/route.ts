@@ -58,6 +58,7 @@ export async function POST(req: NextRequest) {
       goal: goal || null,
       status: 'ready',
       apiKey,
+      userId: session.type === 'user' && session.user ? session.user.id : null,
       createdAt: now,
       updatedAt: now,
     });

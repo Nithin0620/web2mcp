@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     }
 
     // Check existing
-    const [existing] = await db.select().from(users).where(eq(users.email, cleanEmail)).all();
+    const [existing] = await db.select().from(users).where(eq(users.email, cleanEmail));
     if (existing) {
       return NextResponse.json(
         { error: 'An account with this email already exists. Please log in.' },

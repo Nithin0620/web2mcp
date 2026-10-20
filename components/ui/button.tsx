@@ -17,13 +17,13 @@ const buttonVariants = cva(
         destructive:
           "bg-[#DF1B41] text-white hover:bg-[#C91336] shadow-sm",
         outline:
-          "border border-[#E5EDF5] bg-white text-[#0A2540] hover:bg-[#F8FAFD] hover:border-[#CFD8E3] active:bg-[#EEF2F6] shadow-[0_1px_2px_rgba(50,50,93,0.05)]",
+          "border border-[#E5EDF5] dark:border-[#1E293B] bg-white dark:bg-[#111827] text-[#0A2540] dark:text-[#F8FAFC] hover:bg-[#F8FAFD] dark:hover:bg-[#1E293B] hover:border-[#CFD8E3] dark:hover:border-[#334155] active:bg-[#EEF2F6] dark:active:bg-[#27354D] shadow-[0_1px_2px_rgba(50,50,93,0.05)]",
         secondary:
-          "bg-[#F8FAFD] text-[#0A2540] hover:bg-[#EEF2F6] border border-[#E5EDF5]",
+          "bg-[#F8FAFD] dark:bg-[#1E293B] text-[#0A2540] dark:text-[#F8FAFC] hover:bg-[#EEF2F6] dark:hover:bg-[#27354D] border border-[#E5EDF5] dark:border-[#1E293B]",
         ghost:
-          "text-[#3C4F69] hover:text-[#0A2540] hover:bg-[#F8FAFD]",
+          "text-[#3C4F69] dark:text-[#CBD5E1] hover:text-[#0A2540] dark:hover:text-[#F8FAFC] hover:bg-[#F8FAFD] dark:hover:bg-[#1E293B]",
         link:
-          "text-[#533AFD] underline-offset-4 hover:underline hover:text-[#5452FB]",
+          "text-[#533AFD] dark:text-[#818CF8] underline-offset-4 hover:underline hover:text-[#5452FB] dark:hover:text-[#A5B4FC]",
       },
       size: {
         default: "h-9 px-4 py-2",
