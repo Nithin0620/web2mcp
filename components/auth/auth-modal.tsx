@@ -47,19 +47,15 @@ export function AuthModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0A2540]/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div
-        className="relative w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 sm:p-8 text-slate-100 overflow-hidden"
+        className="relative w-full max-w-md bg-white border border-[#E5EDF5] rounded-xl shadow-[0_20px_40px_-15px_rgba(50,50,93,0.25),0_10px_20px_-10px_rgba(0,0,0,0.2)] p-6 sm:p-8 text-[#061B31] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Decorative background glow */}
-        <div className="absolute -top-24 -right-24 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
-
         {/* Close Button */}
         <button
           onClick={closeAuthModal}
-          className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800 transition-colors"
+          className="absolute top-4 right-4 p-1.5 rounded-md text-[#50617A] hover:text-[#0A2540] hover:bg-[#F8FAFD] transition-colors"
           aria-label="Close"
         >
           <X className="h-5 w-5" />
@@ -67,13 +63,13 @@ export function AuthModal() {
 
         {/* Header */}
         <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center h-12 w-12 rounded-xl bg-blue-600/20 border border-blue-500/30 text-blue-400 mb-3 shadow-inner">
+          <div className="inline-flex items-center justify-center h-12 w-12 rounded-lg bg-[#F8FAFD] border border-[#E5EDF5] text-[#533AFD] mb-3 shadow-[0_1px_2px_rgba(50,50,93,0.05)]">
             <Sparkles className="h-6 w-6" />
           </div>
-          <h2 className="text-xl font-bold tracking-tight text-white">
+          <h2 className="text-xl font-bold tracking-tight text-[#0A2540]">
             {tab === 'login' ? 'Welcome Back to Web2MCP' : 'Create Free Account'}
           </h2>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-[#50617A] mt-1">
             {tab === 'login'
               ? 'Sign in to access your projects, evidence vault, and credits.'
               : 'Sign up to immediately unlock 10 free MCP tool generations.'}
@@ -82,26 +78,26 @@ export function AuthModal() {
 
         {/* Free Credits Highlight Banner */}
         {tab === 'register' && (
-          <div className="mb-6 p-3 rounded-xl bg-blue-950/40 border border-blue-800/50 flex items-center gap-2.5 text-xs text-blue-300">
-            <ShieldCheck className="h-4 w-4 text-blue-400 shrink-0" />
+          <div className="mb-6 p-3 rounded-lg bg-[#F8FAFD] border border-[#D6D9FC] flex items-center gap-2.5 text-xs text-[#3C4F69]">
+            <ShieldCheck className="h-4 w-4 text-[#533AFD] shrink-0" />
             <span>
-              <strong>10 Free Credits:</strong> Guest users get 3, registered users get 10 free MCP generations.
+              <strong className="text-[#0A2540]">10 Free Credits:</strong> Guest users get 3, registered accounts receive 10 free MCP generations.
             </span>
           </div>
         )}
 
         {/* Tabs switcher */}
-        <div className="grid grid-cols-2 p-1 bg-slate-950 rounded-xl border border-slate-800 mb-6 text-xs font-semibold">
+        <div className="grid grid-cols-2 p-1 bg-[#F8FAFD] rounded-lg border border-[#E5EDF5] mb-6 text-xs font-semibold">
           <button
             type="button"
             onClick={() => {
               setTab('login');
               setError(null);
             }}
-            className={`py-2 rounded-lg transition-all ${
+            className={`py-2 rounded-md transition-all ${
               tab === 'login'
-                ? 'bg-slate-800 text-white shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-white text-[#0A2540] shadow-[0_1px_2px_rgba(50,50,93,0.08)]'
+                : 'text-[#50617A] hover:text-[#0A2540]'
             }`}
           >
             Sign In
@@ -112,10 +108,10 @@ export function AuthModal() {
               setTab('register');
               setError(null);
             }}
-            className={`py-2 rounded-lg transition-all ${
+            className={`py-2 rounded-md transition-all ${
               tab === 'register'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-[#533AFD] text-white shadow-[0_1px_2px_rgba(83,58,253,0.25)]'
+                : 'text-[#50617A] hover:text-[#0A2540]'
             }`}
           >
             Register (10 Free)
@@ -124,7 +120,7 @@ export function AuthModal() {
 
         {/* Error message */}
         {error && (
-          <div className="mb-4 p-3 rounded-xl bg-red-950/50 border border-red-800/60 text-xs text-red-300">
+          <div className="mb-4 p-3 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-700">
             {error}
           </div>
         )}
@@ -133,40 +129,40 @@ export function AuthModal() {
         <form onSubmit={handleSubmit} className="space-y-4">
           {tab === 'register' && (
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">Your Name</label>
+              <label className="block text-xs font-medium text-[#0A2540] mb-1.5">Your Name</label>
               <div className="relative">
-                <UserIcon className="absolute left-3 top-3 h-4 w-4 text-slate-500" />
+                <UserIcon className="absolute left-3 top-3 h-4 w-4 text-[#94A3B8]" />
                 <input
                   type="text"
                   required
                   placeholder="e.g. Alex Rivera"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  className="w-full pl-9 pr-3 py-2 bg-white border border-[#E5EDF5] rounded-md text-xs text-[#061B31] placeholder:text-[#94A3B8] shadow-[0_1px_2px_rgba(50,50,93,0.04)] focus:outline-none focus:border-[#533AFD] focus:ring-2 focus:ring-[#5452FB]/20 transition-all"
                 />
               </div>
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">Email Address</label>
+            <label className="block text-xs font-medium text-[#0A2540] mb-1.5">Email Address</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-500" />
+              <Mail className="absolute left-3 top-3 h-4 w-4 text-[#94A3B8]" />
               <input
                 type="email"
                 required
                 placeholder="you@company.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-9 pr-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full pl-9 pr-3 py-2 bg-white border border-[#E5EDF5] rounded-md text-xs text-[#061B31] placeholder:text-[#94A3B8] shadow-[0_1px_2px_rgba(50,50,93,0.04)] focus:outline-none focus:border-[#533AFD] focus:ring-2 focus:ring-[#5452FB]/20 transition-all"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">Password</label>
+            <label className="block text-xs font-medium text-[#0A2540] mb-1.5">Password</label>
             <div className="relative">
-              <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-500" />
+              <Lock className="absolute left-3 top-3 h-4 w-4 text-[#94A3B8]" />
               <input
                 type="password"
                 required
@@ -174,7 +170,7 @@ export function AuthModal() {
                 minLength={6}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-9 pr-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full pl-9 pr-3 py-2 bg-white border border-[#E5EDF5] rounded-md text-xs text-[#061B31] placeholder:text-[#94A3B8] shadow-[0_1px_2px_rgba(50,50,93,0.04)] focus:outline-none focus:border-[#533AFD] focus:ring-2 focus:ring-[#5452FB]/20 transition-all"
               />
             </div>
           </div>
@@ -182,7 +178,7 @@ export function AuthModal() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-50 shadow-md shadow-blue-500/20"
+            className="w-full py-2.5 px-4 bg-[#533AFD] hover:bg-[#5452FB] active:bg-[#4032C8] text-white rounded-md text-xs font-semibold flex items-center justify-center gap-2 transition-all disabled:opacity-50 shadow-[0_2px_4px_rgba(83,58,253,0.25)]"
           >
             {submitting ? (
               <span className="animate-spin inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
@@ -199,7 +195,7 @@ export function AuthModal() {
         </form>
 
         {/* Footer switch prompt */}
-        <div className="mt-6 text-center text-xs text-slate-400">
+        <div className="mt-6 text-center text-xs text-[#50617A]">
           {tab === 'login' ? (
             <p>
               Don&apos;t have an account?{' '}
@@ -209,7 +205,7 @@ export function AuthModal() {
                   setTab('register');
                   setError(null);
                 }}
-                className="text-blue-400 font-medium hover:underline"
+                className="text-[#533AFD] font-medium hover:underline"
               >
                 Sign up for 10 free credits
               </button>
@@ -223,7 +219,7 @@ export function AuthModal() {
                   setTab('login');
                   setError(null);
                 }}
-                className="text-blue-400 font-medium hover:underline"
+                className="text-[#533AFD] font-medium hover:underline"
               >
                 Sign in
               </button>

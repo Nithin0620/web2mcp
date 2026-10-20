@@ -24,36 +24,34 @@ export default async function HomePage() {
   const allTools = await db.select().from(tools);
 
   return (
-    <div className="space-y-20 pb-20">
-      {/* Hero Section */}
-      <section className="relative pt-20 pb-12 overflow-hidden border-b border-slate-800/80">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(59,130,246,0.15),rgba(255,255,255,0))]" />
-
+    <div className="space-y-20 pb-24 bg-white text-[#061B31]">
+      {/* Stripe Hero Section */}
+      <section className="relative pt-24 pb-16 overflow-hidden border-b border-[#E5EDF5] bg-gradient-to-b from-[#F8FAFD] via-white to-white">
         <div className="max-w-5xl mx-auto px-4 text-center relative z-10 space-y-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-xs text-blue-400 font-medium">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#D6D9FC] bg-[#D6D9FC]/30 text-xs text-[#533AFD] font-medium shadow-[0_1px_2px_rgba(50,50,93,0.04)]">
             <Sparkles className="h-3.5 w-3.5" /> TinyFish Agent + Model Context Protocol
           </div>
 
-          <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-[1.15]">
+          <h1 className="text-4xl sm:text-6xl font-medium tracking-tight text-[#0A2540] leading-[1.12]">
             Turn Any Website into <br className="hidden sm:inline" />
-            <span className="bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#533AFD] via-[#635BFF] to-[#2E2B8C] bg-clip-text text-transparent font-semibold">
               Live, Verified MCP Tools
             </span>{' '}
             for AI Agents
           </h1>
 
-          <p className="max-w-2xl mx-auto text-base sm:text-lg text-slate-400 leading-relaxed">
+          <p className="max-w-2xl mx-auto text-base sm:text-lg text-[#3C4F69] leading-relaxed font-normal">
             Websites are built for humans, not agents. Web2MCP autonomously navigates forms, infers typed schemas, verifies live responses against saved evidence, and generates hosted & stdio MCP servers in minutes.
           </p>
 
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link href="/projects/new">
-              <Button size="lg" className="gap-2 font-semibold shadow-lg shadow-blue-500/20">
+              <Button size="lg" className="gap-2 font-medium bg-[#533AFD] hover:bg-[#5452FB] text-white shadow-[0_2px_4px_rgba(83,58,253,0.25)] rounded-md">
                 Explore Website & Generate Tools <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
-            <div className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-slate-800 bg-slate-900/80 font-mono text-xs text-slate-300">
-              <Terminal className="h-3.5 w-3.5 text-blue-400" /> npx web2mcp add &lt;url&gt;
+            <div className="flex items-center gap-2 px-4 py-2.5 rounded-md border border-[#E5EDF5] bg-[#F8FAFD] font-mono text-xs text-[#061B31] shadow-[0_1px_2px_rgba(50,50,93,0.04)]">
+              <Terminal className="h-3.5 w-3.5 text-[#533AFD]" /> npx web2mcp add &lt;url&gt;
             </div>
           </div>
         </div>
@@ -62,49 +60,49 @@ export default async function HomePage() {
       {/* 3-Step Interactive Pipeline */}
       <section id="how-it-works" className="max-w-6xl mx-auto px-4 scroll-mt-24">
         <div className="text-center space-y-2 mb-12">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-semibold border border-blue-500/20">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D6D9FC]/40 text-[#533AFD] text-xs font-semibold border border-[#D6D9FC]">
             Step-by-Step Architecture
           </div>
-          <h2 className="text-3xl font-bold text-white">How Web2MCP Works</h2>
-          <p className="text-sm text-slate-400">From a raw human portal to an authenticated Model Context Protocol tool</p>
+          <h2 className="text-3xl font-bold text-[#0A2540]">How Web2MCP Works</h2>
+          <p className="text-sm text-[#50617A]">From a raw human portal to an authenticated Model Context Protocol tool</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 space-y-3 relative overflow-hidden group hover:border-slate-700 transition-all">
-            <div className="h-10 w-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 font-bold">
+          <div className="rounded-lg border border-[#E5EDF5] bg-[#F8FAFD] p-6 space-y-3 relative overflow-hidden group hover:border-[#CFD8E3] transition-all shadow-[0_2px_4px_rgba(50,50,93,0.04)]">
+            <div className="h-10 w-10 rounded-md bg-[#D6D9FC]/50 border border-[#D6D9FC] flex items-center justify-center text-[#533AFD] font-bold text-sm">
               1
             </div>
-            <h3 className="font-semibold text-lg text-white">Autonomous Web Exploration</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <h3 className="font-semibold text-lg text-[#0A2540]">Autonomous Web Exploration</h3>
+            <p className="text-xs text-[#3C4F69] leading-relaxed">
               TinyFish browser agents navigate complex SPAs, exercise search filters, detect form inputs, and inspect dynamic responses with anti-bot resilience.
             </p>
-            <div className="pt-2 text-xs font-mono text-blue-400 flex items-center gap-1">
+            <div className="pt-2 text-xs font-mono text-[#533AFD] flex items-center gap-1">
               <Globe className="h-3.5 w-3.5" /> Portal & DOM Extraction
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 space-y-3 relative overflow-hidden group hover:border-slate-700 transition-all">
-            <div className="h-10 w-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 font-bold">
+          <div className="rounded-lg border border-[#E5EDF5] bg-[#F8FAFD] p-6 space-y-3 relative overflow-hidden group hover:border-[#CFD8E3] transition-all shadow-[0_2px_4px_rgba(50,50,93,0.04)]">
+            <div className="h-10 w-10 rounded-md bg-[#D6D9FC]/50 border border-[#D6D9FC] flex items-center justify-center text-[#533AFD] font-bold text-sm">
               2
             </div>
-            <h3 className="font-semibold text-lg text-white">AI Schema Inference & Safety Gate</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <h3 className="font-semibold text-lg text-[#0A2540]">AI Schema Inference & Safety Gate</h3>
+            <p className="text-xs text-[#3C4F69] leading-relaxed">
               LLMs analyze observed fields to synthesize typed JSON Schemas. Consequential actions (bookings, purchases) are classified with human confirmation gates.
             </p>
-            <div className="pt-2 text-xs font-mono text-purple-400 flex items-center gap-1">
+            <div className="pt-2 text-xs font-mono text-[#533AFD] flex items-center gap-1">
               <Cpu className="h-3.5 w-3.5" /> Typed Schemas & Approval Gates
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 space-y-3 relative overflow-hidden group hover:border-slate-700 transition-all">
-            <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold">
+          <div className="rounded-lg border border-[#E5EDF5] bg-[#F8FAFD] p-6 space-y-3 relative overflow-hidden group hover:border-[#CFD8E3] transition-all shadow-[0_2px_4px_rgba(50,50,93,0.04)]">
+            <div className="h-10 w-10 rounded-md bg-emerald-100 border border-emerald-200 flex items-center justify-center text-emerald-700 font-bold text-sm">
               3
             </div>
-            <h3 className="font-semibold text-lg text-white">Live Validation & Evidence Vault</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <h3 className="font-semibold text-lg text-[#0A2540]">Live Validation & Evidence Vault</h3>
+            <p className="text-xs text-[#3C4F69] leading-relaxed">
               Synthetic probes test real pages before deployment. Every run captures an immutable DOM hash and payload trace to instantly detect website redesign drift.
             </p>
-            <div className="pt-2 text-xs font-mono text-emerald-400 flex items-center gap-1">
+            <div className="pt-2 text-xs font-mono text-emerald-700 flex items-center gap-1">
               <CheckCircle2 className="h-3.5 w-3.5" /> Continuous Health & Drift Detection
             </div>
           </div>
@@ -114,70 +112,70 @@ export default async function HomePage() {
       {/* Platform Features Section */}
       <section id="features" className="max-w-6xl mx-auto px-4 scroll-mt-24 space-y-12">
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 text-purple-400 text-xs font-semibold border border-purple-500/20">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D6D9FC]/40 text-[#533AFD] text-xs font-semibold border border-[#D6D9FC]">
             Enterprise-Grade Platform
           </div>
-          <h2 className="text-3xl font-bold text-white">Production-Ready MCP Capabilities</h2>
-          <p className="text-sm text-slate-400">Everything AI agents need to operate human websites reliably.</p>
+          <h2 className="text-3xl font-bold text-[#0A2540]">Production-Ready MCP Capabilities</h2>
+          <p className="text-sm text-[#50617A]">Everything AI agents need to operate human websites reliably.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800 space-y-3">
-            <div className="h-10 w-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
+          <div className="p-6 rounded-lg bg-white border border-[#E5EDF5] space-y-3 shadow-[0_2px_4px_rgba(50,50,93,0.04)] hover:shadow-[0_4px_8px_rgba(50,50,93,0.08)] transition-all">
+            <div className="h-10 w-10 rounded-md bg-[#F8FAFD] border border-[#E5EDF5] text-[#533AFD] flex items-center justify-center font-bold">
               <Layers className="h-5 w-5" />
             </div>
-            <h3 className="font-semibold text-white text-base">Streamable HTTP Transport</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <h3 className="font-semibold text-[#0A2540] text-base">Streamable HTTP Transport</h3>
+            <p className="text-xs text-[#3C4F69] leading-relaxed">
               Standard JSON-RPC 2.0 streaming endpoints compliant with the 2024-11-05 & 2025-11-25 MCP specifications.
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800 space-y-3">
-            <div className="h-10 w-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
+          <div className="p-6 rounded-lg bg-white border border-[#E5EDF5] space-y-3 shadow-[0_2px_4px_rgba(50,50,93,0.04)] hover:shadow-[0_4px_8px_rgba(50,50,93,0.08)] transition-all">
+            <div className="h-10 w-10 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center font-bold">
               <Activity className="h-5 w-5" />
             </div>
-            <h3 className="font-semibold text-white text-base">Evidence Vault Auditing</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <h3 className="font-semibold text-[#0A2540] text-base">Evidence Vault Auditing</h3>
+            <p className="text-xs text-[#3C4F69] leading-relaxed">
               Every synthetic probe captures execution traces and DOM hashes so you know when a target site changes structure.
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800 space-y-3">
-            <div className="h-10 w-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+          <div className="p-6 rounded-lg bg-white border border-[#E5EDF5] space-y-3 shadow-[0_2px_4px_rgba(50,50,93,0.04)] hover:shadow-[0_4px_8px_rgba(50,50,93,0.08)] transition-all">
+            <div className="h-10 w-10 rounded-md bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center font-bold">
               <Shield className="h-5 w-5" />
             </div>
-            <h3 className="font-semibold text-white text-base">Two-Phase Safety Gate</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <h3 className="font-semibold text-[#0A2540] text-base">Two-Phase Safety Gate</h3>
+            <p className="text-xs text-[#3C4F69] leading-relaxed">
               Automatic interception for consequential actions (orders, payments) requiring human token authorization.
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800 space-y-3">
-            <div className="h-10 w-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold">
+          <div className="p-6 rounded-lg bg-white border border-[#E5EDF5] space-y-3 shadow-[0_2px_4px_rgba(50,50,93,0.04)] hover:shadow-[0_4px_8px_rgba(50,50,93,0.08)] transition-all">
+            <div className="h-10 w-10 rounded-md bg-[#F8FAFD] border border-[#E5EDF5] text-[#533AFD] flex items-center justify-center font-bold">
               <Terminal className="h-5 w-5" />
             </div>
-            <h3 className="font-semibold text-white text-base">1-Click IDE Installers</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <h3 className="font-semibold text-[#0A2540] text-base">1-Click IDE Installers</h3>
+            <p className="text-xs text-[#3C4F69] leading-relaxed">
               Install generated servers directly into Cursor, Claude Desktop, and VS Code with a single CLI command.
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800 space-y-3">
-            <div className="h-10 w-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold">
+          <div className="p-6 rounded-lg bg-white border border-[#E5EDF5] space-y-3 shadow-[0_2px_4px_rgba(50,50,93,0.04)] hover:shadow-[0_4px_8px_rgba(50,50,93,0.08)] transition-all">
+            <div className="h-10 w-10 rounded-md bg-cyan-50 border border-cyan-200 text-cyan-700 flex items-center justify-center font-bold">
               <Globe className="h-5 w-5" />
             </div>
-            <h3 className="font-semibold text-white text-base">TinyFish Cloud Automation</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <h3 className="font-semibold text-[#0A2540] text-base">TinyFish Cloud Automation</h3>
+            <p className="text-xs text-[#3C4F69] leading-relaxed">
               Cloud browser agents navigate complex SPAs, solve multi-step forms, and maintain authenticated sessions.
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800 space-y-3">
-            <div className="h-10 w-10 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold">
+          <div className="p-6 rounded-lg bg-white border border-[#E5EDF5] space-y-3 shadow-[0_2px_4px_rgba(50,50,93,0.04)] hover:shadow-[0_4px_8px_rgba(50,50,93,0.08)] transition-all">
+            <div className="h-10 w-10 rounded-md bg-[#F8FAFD] border border-[#D6D9FC] text-[#533AFD] flex items-center justify-center font-bold">
               <Sparkles className="h-5 w-5" />
             </div>
-            <h3 className="font-semibold text-white text-base">Free Tier & Micro-Pricing</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <h3 className="font-semibold text-[#0A2540] text-base">Free Tier & Micro-Pricing</h3>
+            <p className="text-xs text-[#3C4F69] leading-relaxed">
               3 free generations as a guest, 10 on signup, and affordable $2 Starter and $20 Pro tiers with generous quotas.
             </p>
           </div>
@@ -186,21 +184,21 @@ export default async function HomePage() {
 
       {/* Safety Gate Alert Banner */}
       <section className="max-w-6xl mx-auto px-4">
-        <div className="rounded-2xl border border-amber-500/30 bg-amber-950/20 p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="rounded-lg border border-amber-200 bg-amber-50/70 p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-[0_1px_2px_rgba(50,50,93,0.04)]">
           <div className="flex items-start gap-3.5">
-            <div className="h-10 w-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0 mt-0.5">
+            <div className="h-10 w-10 rounded-md bg-amber-100 border border-amber-300 flex items-center justify-center text-amber-700 shrink-0 mt-0.5">
               <Lock className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-base font-semibold text-amber-300">
+              <h3 className="text-base font-semibold text-[#0A2540]">
                 Human-in-the-Loop Safety Gate
               </h3>
-              <p className="text-xs text-slate-300 mt-1 max-w-2xl leading-relaxed">
+              <p className="text-xs text-[#3C4F69] mt-1 max-w-2xl leading-relaxed">
                 Agents are powerful, but consequential operations shouldn&apos;t run wild. Any generated tool performing bookings, transactions, or state mutations requires explicit confirmation before executing.
               </p>
             </div>
           </div>
-          <Badge variant="warning" className="shrink-0 text-xs">
+          <Badge variant="warning" className="shrink-0 text-xs font-medium">
             Zero Unintended Actions
           </Badge>
         </div>
@@ -210,8 +208,8 @@ export default async function HomePage() {
       <section className="max-w-6xl mx-auto px-4 space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold text-white">Generated MCP Projects</h2>
-            <p className="text-xs text-slate-400">
+            <h2 className="text-xl font-bold text-[#0A2540]">Generated MCP Projects</h2>
+            <p className="text-xs text-[#50617A]">
               Live websites currently exposed as verified MCP servers
             </p>
           </div>
@@ -223,8 +221,8 @@ export default async function HomePage() {
         </div>
 
         {allProjects.length === 0 ? (
-          <div className="p-12 text-center rounded-2xl border border-slate-800 bg-slate-900/40 space-y-3">
-            <p className="text-sm text-slate-400">No websites converted yet.</p>
+          <div className="p-12 text-center rounded-lg border border-[#E5EDF5] bg-[#F8FAFD] space-y-3">
+            <p className="text-sm text-[#50617A]">No websites converted yet.</p>
             <Link href="/projects/new">
               <Button size="sm">Convert Your First Website</Button>
             </Link>
@@ -239,30 +237,30 @@ export default async function HomePage() {
                 <Link
                   key={p.id}
                   href={`/projects/${p.id}`}
-                  className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 hover:border-slate-700 hover:bg-slate-900 transition-all flex flex-col justify-between group space-y-4"
+                  className="rounded-lg border border-[#E5EDF5] bg-white p-5 hover:border-[#CFD8E3] hover:shadow-[0_4px_8px_rgba(50,50,93,0.06)] transition-all flex flex-col justify-between group space-y-4 shadow-[0_1px_2px_rgba(50,50,93,0.04)]"
                 >
                   <div>
                     <div className="flex items-center justify-between">
-                      <h3 className="font-semibold text-white group-hover:text-blue-400 transition-colors">
+                      <h3 className="font-semibold text-[#0A2540] group-hover:text-[#533AFD] transition-colors">
                         {p.name}
                       </h3>
                       <Badge variant="success" className="text-[10px]">
                         Active
                       </Badge>
                     </div>
-                    <p className="text-xs text-slate-400 line-clamp-1 mt-1 font-mono">
+                    <p className="text-xs text-[#50617A] line-clamp-1 mt-1 font-mono">
                       {p.targetUrl}
                     </p>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                  <div className="pt-3 border-t border-[#E5EDF5] flex items-center justify-between text-xs text-[#50617A]">
                     <span>{projectTools.length} live tools</span>
                     {consequentialCount > 0 && (
-                      <span className="text-amber-400 text-[11px]">
+                      <span className="text-amber-700 font-medium text-[11px]">
                         {consequentialCount} approval-gated
                       </span>
                     )}
-                    <ChevronRight className="h-4 w-4 text-slate-500 group-hover:text-white transition-colors" />
+                    <ChevronRight className="h-4 w-4 text-[#94A3B8] group-hover:text-[#0A2540] transition-colors" />
                   </div>
                 </Link>
               );

@@ -8,25 +8,27 @@ function cn(...inputs: any[]) {
 }
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 disabled:pointer-events-none disabled:opacity-50 select-none",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5452FB]/40 disabled:pointer-events-none disabled:opacity-50 select-none",
   {
     variants: {
       variant: {
         default:
-          "bg-blue-600 text-white shadow hover:bg-blue-500 active:bg-blue-700",
+          "bg-[#533AFD] text-white hover:bg-[#5452FB] active:bg-[#4032C8] shadow-[0_2px_4px_rgba(50,50,93,0.12),0_1px_2px_rgba(0,0,0,0.08)]",
         destructive:
-          "bg-red-600 text-white shadow-sm hover:bg-red-500",
+          "bg-[#DF1B41] text-white hover:bg-[#C91336] shadow-sm",
         outline:
-          "border border-slate-700 bg-slate-900/60 hover:bg-slate-800 text-slate-200",
+          "border border-[#E5EDF5] bg-white text-[#0A2540] hover:bg-[#F8FAFD] hover:border-[#CFD8E3] active:bg-[#EEF2F6] shadow-[0_1px_2px_rgba(50,50,93,0.05)]",
         secondary:
-          "bg-slate-800 text-slate-200 hover:bg-slate-700",
-        ghost: "hover:bg-slate-800 text-slate-300 hover:text-white",
-        link: "text-blue-400 underline-offset-4 hover:underline",
+          "bg-[#F8FAFD] text-[#0A2540] hover:bg-[#EEF2F6] border border-[#E5EDF5]",
+        ghost:
+          "text-[#3C4F69] hover:text-[#0A2540] hover:bg-[#F8FAFD]",
+        link:
+          "text-[#533AFD] underline-offset-4 hover:underline hover:text-[#5452FB]",
       },
       size: {
         default: "h-9 px-4 py-2",
-        sm: "h-8 rounded-md px-3 text-xs",
-        lg: "h-11 rounded-lg px-8 text-base",
+        sm: "h-8 rounded px-3 text-xs",
+        lg: "h-11 rounded-md px-6 text-base",
         icon: "h-9 w-9",
       },
     },

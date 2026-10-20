@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Sparkles, ArrowRight, Globe, Target, Terminal, CheckCircle2, Zap, AlertCircle, ShieldCheck } from 'lucide-react';
+import { Sparkles, ArrowRight, Globe, Target, Terminal, CheckCircle2, Zap, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
@@ -119,19 +119,19 @@ export default function NewProjectPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-10 space-y-8">
+    <div className="max-w-4xl mx-auto px-4 py-12 space-y-8 bg-white text-[#061B31]">
       {/* Credits Status Banner */}
       {!authenticated ? (
-        <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-950/60 to-indigo-950/40 border border-blue-800/40 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs shadow-lg">
+        <div className="p-4 rounded-lg bg-[#F8FAFD] border border-[#E5EDF5] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs shadow-[0_1px_2px_rgba(50,50,93,0.04)]">
           <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center shrink-0">
+            <div className="h-8 w-8 rounded-md bg-[#D6D9FC]/40 text-[#533AFD] flex items-center justify-center shrink-0">
               <Zap className="h-4 w-4 fill-current" />
             </div>
             <div>
-              <p className="font-semibold text-slate-200">
-                Guest Mode: <span className="text-blue-400">{creditsRemaining} of 3 free credits</span> remaining
+              <p className="font-semibold text-[#0A2540]">
+                Guest Mode: <span className="text-[#533AFD]">{creditsRemaining} of 3 free credits</span> remaining
               </p>
-              <p className="text-slate-400 text-[11px]">
+              <p className="text-[#50617A] text-[11px]">
                 Create a free account to unlock 10 full generations with evidence vault tracking.
               </p>
             </div>
@@ -139,23 +139,23 @@ export default function NewProjectPage() {
           <button
             type="button"
             onClick={() => openAuthModal('register')}
-            className="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-colors shrink-0 shadow-sm"
+            className="px-3.5 py-1.5 rounded-md bg-[#533AFD] hover:bg-[#5452FB] text-white font-semibold transition-colors shrink-0 shadow-[0_2px_4px_rgba(83,58,253,0.2)]"
           >
             Claim 10 Free Credits
           </button>
         </div>
       ) : (
-        <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 flex items-center justify-between text-xs">
+        <div className="p-4 rounded-lg bg-[#F8FAFD] border border-[#E5EDF5] flex items-center justify-between text-xs shadow-[0_1px_2px_rgba(50,50,93,0.04)]">
           <div className="flex items-center gap-2.5">
-            <ShieldCheck className="h-4 w-4 text-emerald-400" />
-            <span className="text-slate-300">
-              Logged in as <strong className="text-white">{tier.toUpperCase()}</strong> plan user ·{' '}
-              <strong className="text-emerald-400">{creditsRemaining} credits</strong> available
+            <ShieldCheck className="h-4 w-4 text-emerald-600" />
+            <span className="text-[#50617A]">
+              Logged in as <strong className="text-[#0A2540]">{tier.toUpperCase()}</strong> plan user ·{' '}
+              <strong className="text-emerald-700">{creditsRemaining} credits</strong> available
             </span>
           </div>
           <Link
             href="/pricing"
-            className="text-blue-400 hover:text-blue-300 font-medium hover:underline text-xs"
+            className="text-[#533AFD] hover:text-[#5452FB] font-medium hover:underline text-xs"
           >
             Manage Plan →
           </Link>
@@ -163,17 +163,17 @@ export default function NewProjectPage() {
       )}
 
       <div>
-        <h1 className="text-3xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
-          <Sparkles className="h-7 w-7 text-blue-400" /> Generate Live MCP Server
+        <h1 className="text-3xl font-bold tracking-tight text-[#0A2540] flex items-center gap-2.5">
+          <Sparkles className="h-7 w-7 text-[#533AFD]" /> Generate Live MCP Server
         </h1>
-        <p className="mt-1 text-slate-400">
+        <p className="mt-1 text-[#50617A] text-sm">
           Point Web2MCP at any human-facing website. Autonomous exploration will map forms, infer typed schemas, validate with evidence, and produce ready-to-use tools.
         </p>
       </div>
 
       {/* Quick Start Presets */}
       <div className="space-y-2">
-        <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+        <span className="text-xs font-semibold uppercase tracking-wider text-[#64748D]">
           Quick-Start Examples
         </span>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -182,12 +182,12 @@ export default function NewProjectPage() {
               key={p.name}
               type="button"
               onClick={() => applyPreset(p)}
-              className="text-left p-3.5 rounded-xl border border-slate-800 bg-slate-900/50 hover:bg-slate-900 hover:border-slate-700 transition-all text-xs group"
+              className="text-left p-3.5 rounded-lg border border-[#E5EDF5] bg-white hover:border-[#CFD8E3] hover:shadow-[0_2px_4px_rgba(50,50,93,0.06)] transition-all text-xs group shadow-[0_1px_2px_rgba(50,50,93,0.03)]"
             >
-              <div className="font-semibold text-white group-hover:text-blue-400 transition-colors">
+              <div className="font-semibold text-[#0A2540] group-hover:text-[#533AFD] transition-colors">
                 {p.name}
               </div>
-              <div className="text-slate-400 mt-1 line-clamp-1">{p.goal}</div>
+              <div className="text-[#50617A] mt-1 line-clamp-1">{p.goal}</div>
             </button>
           ))}
         </div>
@@ -204,8 +204,8 @@ export default function NewProjectPage() {
         <CardContent>
           <form onSubmit={handleGenerate} className="space-y-4">
             <div>
-              <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5 mb-1.5">
-                <Globe className="h-3.5 w-3.5 text-blue-400" /> Target Website URL
+              <label className="text-xs font-medium text-[#0A2540] flex items-center gap-1.5 mb-1.5">
+                <Globe className="h-3.5 w-3.5 text-[#533AFD]" /> Target Website URL
               </label>
               <Input
                 type="url"
@@ -213,32 +213,32 @@ export default function NewProjectPage() {
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="https://example.com/portal or https://airline.com/booking"
-                className="bg-slate-950 font-mono text-sm"
+                className="font-mono text-sm"
               />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5 mb-1.5">
-                  <Target className="h-3.5 w-3.5 text-emerald-400" /> Operational Goal (Optional)
+                <label className="text-xs font-medium text-[#0A2540] flex items-center gap-1.5 mb-1.5">
+                  <Target className="h-3.5 w-3.5 text-emerald-600" /> Operational Goal (Optional)
                 </label>
                 <Input
                   value={goal}
                   onChange={(e) => setGoal(e.target.value)}
                   placeholder="e.g. search flights, compare tenders, extract jobs"
-                  className="bg-slate-950 text-sm"
+                  className="text-sm"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5 mb-1.5">
-                  <Terminal className="h-3.5 w-3.5 text-purple-400" /> Project Name (Optional)
+                <label className="text-xs font-medium text-[#0A2540] flex items-center gap-1.5 mb-1.5">
+                  <Terminal className="h-3.5 w-3.5 text-[#533AFD]" /> Project Name (Optional)
                 </label>
                 <Input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. SkyWay Travel Portal"
-                  className="bg-slate-950 text-sm"
+                  className="text-sm"
                 />
               </div>
             </div>
@@ -246,7 +246,7 @@ export default function NewProjectPage() {
             <Button
               type="submit"
               disabled={loading || !url}
-              className="w-full gap-2 py-5 font-semibold text-sm shadow-lg shadow-blue-500/10"
+              className="w-full gap-2 py-5 font-semibold text-sm shadow-[0_2px_4px_rgba(83,58,253,0.25)] bg-[#533AFD] hover:bg-[#5452FB]"
             >
               {loading ? (
                 <>Exploring & Generating Tools...</>
@@ -263,7 +263,7 @@ export default function NewProjectPage() {
       {/* Live Exploration Terminal Feed */}
       {(loading || logs.length > 0) && (
         <div className="space-y-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+          <span className="text-xs font-semibold uppercase tracking-wider text-[#64748D]">
             Real-Time Agentic Pipeline Feed
           </span>
           <LiveTerminal logs={logs} isComplete={Boolean(completedProjectId)} error={error} />
@@ -271,9 +271,9 @@ export default function NewProjectPage() {
       )}
 
       {completedProjectId && (
-        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 flex items-center justify-between">
+        <div className="p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center justify-between shadow-[0_1px_2px_rgba(50,50,93,0.04)]">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+            <CheckCircle2 className="h-5 w-5 text-emerald-600" />
             <span className="font-semibold text-sm">
               MCP Tools Synthesized & Verified! Redirecting to Dashboard...
             </span>

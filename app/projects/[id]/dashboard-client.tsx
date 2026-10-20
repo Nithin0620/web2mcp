@@ -42,13 +42,13 @@ export function ProjectDashboardClient({
   return (
     <div className="space-y-6">
       {/* Navigation Tabs */}
-      <div className="flex border-b border-slate-800 space-x-1 sm:space-x-4">
+      <div className="flex border-b border-[#E5EDF5] space-x-1 sm:space-x-4">
         <button
           onClick={() => setActiveTab('tools')}
           className={`flex items-center gap-2 pb-3.5 px-3 text-sm font-medium border-b-2 transition-all ${
             activeTab === 'tools'
-              ? 'border-blue-500 text-white font-semibold'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-[#533AFD] text-[#533AFD] font-semibold'
+              : 'border-transparent text-[#50617A] hover:text-[#0A2540]'
           }`}
         >
           <Wrench className="h-4 w-4" /> Generated Tools ({tools.length})
@@ -58,8 +58,8 @@ export function ProjectDashboardClient({
           onClick={() => setActiveTab('evidence')}
           className={`flex items-center gap-2 pb-3.5 px-3 text-sm font-medium border-b-2 transition-all ${
             activeTab === 'evidence'
-              ? 'border-blue-500 text-white font-semibold'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-[#533AFD] text-[#533AFD] font-semibold'
+              : 'border-transparent text-[#50617A] hover:text-[#0A2540]'
           }`}
         >
           <ShieldCheck className="h-4 w-4" /> Evidence Vault & Health
@@ -69,8 +69,8 @@ export function ProjectDashboardClient({
           onClick={() => setActiveTab('playground')}
           className={`flex items-center gap-2 pb-3.5 px-3 text-sm font-medium border-b-2 transition-all ${
             activeTab === 'playground'
-              ? 'border-blue-500 text-white font-semibold'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-[#533AFD] text-[#533AFD] font-semibold'
+              : 'border-transparent text-[#50617A] hover:text-[#0A2540]'
           }`}
         >
           <Play className="h-4 w-4" /> Testing Playground
@@ -80,8 +80,8 @@ export function ProjectDashboardClient({
           onClick={() => setActiveTab('connect')}
           className={`flex items-center gap-2 pb-3.5 px-3 text-sm font-medium border-b-2 transition-all ${
             activeTab === 'connect'
-              ? 'border-blue-500 text-white font-semibold'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-[#533AFD] text-[#533AFD] font-semibold'
+              : 'border-transparent text-[#50617A] hover:text-[#0A2540]'
           }`}
         >
           <Plug className="h-4 w-4" /> Connect to IDE

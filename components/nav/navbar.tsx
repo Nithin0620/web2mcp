@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Layers, Sparkles, Zap, User as UserIcon, LogOut, ChevronDown } from 'lucide-react';
+import { Layers, Sparkles, Zap, LogOut, ChevronDown } from 'lucide-react';
 import { useAuth } from '@/lib/auth/auth-context';
 
 export function Navbar() {
@@ -20,22 +20,22 @@ export function Navbar() {
   ];
 
   return (
-    <header className="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md sticky top-0 z-40">
+    <header className="border-b border-[#E5EDF5] bg-white/90 backdrop-blur-md sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
         {/* Brand */}
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="h-9 w-9 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
+            <div className="h-9 w-9 rounded-lg bg-[#533AFD] flex items-center justify-center text-white font-bold shadow-[0_2px_4px_rgba(83,58,253,0.25)] group-hover:bg-[#5452FB] transition-all">
               <Layers className="h-5 w-5" />
             </div>
             <div>
-              <span className="font-extrabold text-base tracking-tight text-white flex items-center gap-1.5">
+              <span className="font-bold text-base tracking-tight text-[#0A2540] flex items-center gap-1.5">
                 Web2MCP
-                <span className="text-[10px] uppercase font-semibold tracking-wider text-blue-400 bg-blue-500/10 px-1.5 py-0.2 rounded border border-blue-500/20">
+                <span className="text-[10px] uppercase font-semibold tracking-wider text-[#533AFD] bg-[#D6D9FC]/40 px-1.5 py-0.5 rounded-full border border-[#D6D9FC]">
                   Live
                 </span>
               </span>
-              <span className="block text-[11px] text-slate-400 -mt-0.5">
+              <span className="block text-[11px] text-[#50617A] -mt-0.5">
                 Website → TinyFish + AI → Live MCP Tools
               </span>
             </div>
@@ -49,10 +49,10 @@ export function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`text-xs font-medium px-3 py-1.5 rounded-lg transition-colors ${
+                  className={`text-xs font-medium px-3 py-1.5 rounded-md transition-colors ${
                     isActive
-                      ? 'text-white bg-slate-800/80'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                      ? 'text-[#533AFD] bg-[#F8FAFD] font-semibold'
+                      : 'text-[#3C4F69] hover:text-[#0A2540] hover:bg-[#F8FAFD]'
                   }`}
                 >
                   {link.name}
@@ -68,13 +68,13 @@ export function Navbar() {
           {authenticated ? (
             <Link
               href="/pricing"
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100/70 transition-colors shadow-[0_1px_2px_rgba(50,50,93,0.04)]"
               title="Click to upgrade or add more credits"
             >
               <Zap className="h-3.5 w-3.5 fill-current" />
               <span>{creditsRemaining} credits</span>
               {tier !== 'free' && (
-                <span className="text-[9px] uppercase px-1 py-0.2 bg-emerald-500/20 rounded font-bold">
+                <span className="text-[9px] uppercase px-1.5 py-0.5 bg-emerald-100 rounded-full font-bold">
                   {tier}
                 </span>
               )}
@@ -82,12 +82,12 @@ export function Navbar() {
           ) : (
             <button
               onClick={() => openAuthModal('register')}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20 hover:bg-blue-500/20 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#F8FAFD] text-[#533AFD] border border-[#D6D9FC] hover:bg-[#EEF2F6] transition-colors shadow-[0_1px_2px_rgba(50,50,93,0.04)]"
               title="Guest mode: 3 free credits. Click to register for 10 free credits!"
             >
               <Zap className="h-3.5 w-3.5 fill-current" />
               <span>{creditsRemaining}/3 Free</span>
-              <span className="hidden sm:inline text-[10px] text-blue-300 font-normal underline">
+              <span className="hidden sm:inline text-[10px] text-[#533AFD] font-normal underline">
                 +7 on signup
               </span>
             </button>
@@ -98,35 +98,35 @@ export function Navbar() {
             <div className="relative">
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-xs text-slate-200 font-medium transition-colors"
+                className="flex items-center gap-2 px-2.5 py-1.5 rounded-md bg-white border border-[#E5EDF5] hover:bg-[#F8FAFD] text-xs text-[#0A2540] font-medium transition-colors shadow-[0_1px_2px_rgba(50,50,93,0.04)]"
               >
-                <div className="h-5 w-5 rounded-full bg-blue-600/30 text-blue-400 flex items-center justify-center font-bold text-[10px]">
+                <div className="h-5 w-5 rounded-full bg-[#D6D9FC] text-[#533AFD] flex items-center justify-center font-bold text-[10px]">
                   {user.name.charAt(0).toUpperCase()}
                 </div>
                 <span className="max-w-[100px] truncate">{user.name}</span>
-                <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
+                <ChevronDown className="h-3.5 w-3.5 text-[#50617A]" />
               </button>
 
               {dropdownOpen && (
                 <div
-                  className="absolute right-0 mt-2 w-48 bg-slate-900 border border-slate-800 rounded-xl shadow-xl py-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
+                  className="absolute right-0 mt-2 w-48 bg-white border border-[#E5EDF5] rounded-lg shadow-[0_13px_27px_-5px_rgba(50,50,93,0.15),0_8px_16px_-8px_rgba(0,0,0,0.12)] py-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
                   onClick={() => setDropdownOpen(false)}
                 >
-                  <div className="px-3 py-2 border-b border-slate-800 text-xs">
-                    <p className="font-semibold text-white">{user.name}</p>
-                    <p className="text-[11px] text-slate-400 truncate">{user.email}</p>
+                  <div className="px-3 py-2 border-b border-[#E5EDF5] text-xs">
+                    <p className="font-semibold text-[#0A2540]">{user.name}</p>
+                    <p className="text-[11px] text-[#50617A] truncate">{user.email}</p>
                   </div>
 
                   <Link
                     href="/pricing"
-                    className="block px-3 py-2 text-xs text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+                    className="block px-3 py-2 text-xs text-[#3C4F69] hover:text-[#0A2540] hover:bg-[#F8FAFD] transition-colors"
                   >
                     Manage Plan & Billing
                   </Link>
 
                   <button
                     onClick={() => logout()}
-                    className="w-full text-left px-3 py-2 text-xs text-red-400 hover:text-red-300 hover:bg-slate-800 flex items-center gap-2 transition-colors"
+                    className="w-full text-left px-3 py-2 text-xs text-rose-600 hover:text-rose-700 hover:bg-rose-50 flex items-center gap-2 transition-colors"
                   >
                     <LogOut className="h-3.5 w-3.5" /> Sign Out
                   </button>
@@ -137,13 +137,13 @@ export function Navbar() {
             <div className="flex items-center gap-1.5">
               <button
                 onClick={() => openAuthModal('login')}
-                className="text-xs font-semibold px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-900 transition-colors"
+                className="text-xs font-semibold px-3 py-1.5 rounded-md text-[#3C4F69] hover:text-[#0A2540] hover:bg-[#F8FAFD] transition-colors"
               >
                 Sign In
               </button>
               <button
                 onClick={() => openAuthModal('register')}
-                className="hidden sm:inline-flex text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white transition-colors border border-slate-700"
+                className="hidden sm:inline-flex text-xs font-semibold px-3 py-1.5 rounded-md bg-[#F8FAFD] hover:bg-[#EEF2F6] text-[#0A2540] transition-colors border border-[#E5EDF5] shadow-[0_1px_2px_rgba(50,50,93,0.04)]"
               >
                 Sign Up
               </button>
@@ -153,7 +153,7 @@ export function Navbar() {
           {/* Primary CTA */}
           <Link
             href="/projects/new"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-500 transition-colors shadow-sm shadow-blue-500/20"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-md bg-[#533AFD] text-white hover:bg-[#5452FB] active:bg-[#4032C8] transition-all shadow-[0_2px_4px_rgba(83,58,253,0.25)]"
           >
             <Sparkles className="h-3.5 w-3.5" /> Generate Tools
           </Link>
