@@ -1,0 +1,15 @@
+{
+  "name": "@web2mcp/cli",
+  "version": "1.0.0",
+  "description": "Turn any website into live, verified MCP tools for AI agents",
+  "bin": {
+    "web2mcp": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "tsx src/index.ts"
+  },
+  "keywords": ["mcp", "model-context-protocol", "ai-agents", "scraper", "automation"],
+  "author": "KS Nithin, Anuraj Upadhyay, Lalit Chandra",
+  "license": "MIT"
+}
