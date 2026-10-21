@@ -8,6 +8,8 @@ import {
   deductCredit,
   upgradeUserTier,
   createUserSession,
+  recordPaymentTransaction,
+  getPaymentTransactionByPaymentId,
 } from '../lib/auth/session';
 import { db, initDb } from '../lib/db/client';
 import { users } from '../lib/db/schema';
@@ -122,5 +124,45 @@ describe('Authentication & Credit Gating System', () => {
     expect(proRes.success).toBe(true);
     expect(proRes.tier).toBe('pro');
     expect(proRes.newCredits).toBe(550);
+  });
+
+  it('records verified payment transactions and prevents duplicate payment reuse', async () => {
+    const userId = `usr_${crypto.randomBytes(8).toString('hex')}`;
+    const paymentId = `pay_test_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`;
+    const now = new Date();
+
+    await db.insert(users).values({
+      id: userId,
+      email: `payuser-${Date.now()}@example.com`,
+      name: 'Payment Test User',
+      passwordHash: hashPassword('password123'),
+      tier: 'free',
+      creditsRemaining: 10,
+      creditsUsed: 0,
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    // 1. Initial check: paymentId does not exist
+    const initialCheck = await getPaymentTransactionByPaymentId(paymentId);
+    expect(initialCheck).toBeNull();
+
+    // 2. Record payment transaction
+    const tx = await recordPaymentTransaction({
+      userId,
+      plan: 'starter',
+      amount: 200,
+      paymentId,
+      billingCycle: 'monthly',
+      paymentProvider: 'razorpay',
+    });
+    expect(tx.id).toMatch(/^tx_/);
+
+    // 3. Subsequent check: paymentId is found
+    const verifiedTx = await getPaymentTransactionByPaymentId(paymentId);
+    expect(verifiedTx).not.toBeNull();
+    expect(verifiedTx?.paymentId).toBe(paymentId);
+    expect(verifiedTx?.plan).toBe('starter');
+    expect(verifiedTx?.status).toBe('completed');
   });
 });

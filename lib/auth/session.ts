@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import { eq } from 'drizzle-orm';
 import { db, initDb } from '../db/client';
-import { users, userSessions, anonymousSessions, type UserRow } from '../db/schema';
+import { users, userSessions, anonymousSessions, paymentTransactions, type UserRow } from '../db/schema';
 
 const SESSION_DURATION_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 
@@ -195,4 +195,50 @@ export async function upgradeUserTier(
     .where(eq(users.id, userId));
 
   return { success: true, newCredits, tier };
+}
+
+export async function getPaymentTransactionByPaymentId(paymentId: string) {
+  await initDb();
+  const [tx] = await db
+    .select()
+    .from(paymentTransactions)
+    .where(eq(paymentTransactions.paymentId, paymentId));
+  return tx || null;
+}
+
+export async function recordPaymentTransaction({
+  userId,
+  plan,
+  amount,
+  currency = 'USD',
+  billingCycle = 'monthly',
+  paymentId,
+  paymentProvider = 'razorpay',
+}: {
+  userId: string;
+  plan: 'starter' | 'pro';
+  amount: number;
+  currency?: string;
+  billingCycle?: string;
+  paymentId: string;
+  paymentProvider?: string;
+}): Promise<{ id: string }> {
+  await initDb();
+  const id = `tx_${crypto.randomBytes(12).toString('hex')}`;
+  const now = new Date();
+
+  await db.insert(paymentTransactions).values({
+    id,
+    userId,
+    plan,
+    amount,
+    currency,
+    billingCycle,
+    paymentProvider,
+    paymentId,
+    status: 'completed',
+    createdAt: now,
+  });
+
+  return { id };
 }

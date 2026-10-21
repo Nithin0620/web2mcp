@@ -39,6 +39,18 @@ export default function NewProjectPage() {
   const [error, setError] = useState<string | null>(null);
   const [completedProjectId, setCompletedProjectId] = useState<string | null>(null);
 
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const qUrl = params.get('url');
+      const qGoal = params.get('goal');
+      const qName = params.get('name');
+      if (qUrl) setUrl(qUrl);
+      if (qGoal) setGoal(qGoal);
+      if (qName) setName(qName);
+    }
+  }, []);
+
   const applyPreset = (preset: typeof PRESETS[0]) => {
     setUrl(preset.url);
     setGoal(preset.goal);

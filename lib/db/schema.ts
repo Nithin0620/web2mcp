@@ -76,6 +76,21 @@ export const userSessions = pgTable('user_sessions', {
   createdAt: timestamp('created_at').notNull(),
 });
 
+export const paymentTransactions = pgTable('payment_transactions', {
+  id: text('id').primaryKey(),
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  plan: text('plan').notNull(), // 'starter' | 'pro'
+  amount: integer('amount').notNull(), // in cents or smallest currency unit
+  currency: text('currency').notNull().default('USD'),
+  billingCycle: text('billing_cycle').notNull().default('monthly'), // 'monthly' | 'annual'
+  paymentProvider: text('payment_provider').notNull().default('razorpay'),
+  paymentId: text('payment_id').notNull().unique(),
+  status: text('status').notNull().default('completed'),
+  createdAt: timestamp('created_at').notNull(),
+});
+
 export type ProjectRow = typeof projects.$inferSelect;
 export type InsertProjectRow = typeof projects.$inferInsert;
 export type ToolRow = typeof tools.$inferSelect;
@@ -88,3 +103,5 @@ export type AnonymousSessionRow = typeof anonymousSessions.$inferSelect;
 export type InsertAnonymousSessionRow = typeof anonymousSessions.$inferInsert;
 export type UserSessionRow = typeof userSessions.$inferSelect;
 export type InsertUserSessionRow = typeof userSessions.$inferInsert;
+export type PaymentTransactionRow = typeof paymentTransactions.$inferSelect;
+export type InsertPaymentTransactionRow = typeof paymentTransactions.$inferInsert;

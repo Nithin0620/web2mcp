@@ -22,7 +22,7 @@ export function Navbar() {
   ];
 
   return (
-    <header className="border-b border-[#E5EDF5] dark:border-[#1E293B] bg-white/90 dark:bg-[#0A0F1D]/90 backdrop-blur-md sticky top-0 z-40 transition-colors">
+    <header className="border-b border-[#E5EDF5] dark:border-[#1E293B] bg-white dark:bg-[#0A0F1D] sticky top-0 z-40 transition-colors shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
         {/* Brand */}
         <div className="flex items-center gap-8">

@@ -5,6 +5,7 @@ import './globals.css';
 import { AuthProvider } from '@/lib/auth/auth-context';
 import { Navbar } from '@/components/nav/navbar';
 import { AuthModal } from '@/components/auth/auth-modal';
+import { PolyWaterDots } from '@/components/ui/poly-water-dots';
 import { SmoothScrollProvider } from '@/components/providers/smooth-scroll';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 
@@ -42,6 +43,9 @@ export default function RootLayout({
         <SmoothScrollProvider>
           <ThemeProvider>
             <AuthProvider>
+              {/* Global Interactive Poly Dotted Water Wave Background */}
+              <PolyWaterDots />
+
               {/* Navigation Header */}
               <Navbar />
 
@@ -49,10 +53,10 @@ export default function RootLayout({
               <AuthModal />
 
               {/* Main Content Area */}
-              <main className="flex-1">{children}</main>
+              <main className="flex-1 relative z-10">{children}</main>
 
-              {/* Global Stripe-Style Footer */}
-              <footer className="border-t border-[#E5EDF5] dark:border-[#1E293B] bg-[#F8FAFD] dark:bg-[#070B14] py-12 text-xs text-[#50617A] dark:text-[#94A3B8]">
+              {/* Global Stripe-Style Footer (Solid background, kept out of canvas animation) */}
+              <footer className="border-t border-[#E5EDF5] dark:border-[#1E293B] bg-[#F8FAFD] dark:bg-[#070B14] relative z-20 py-12 text-xs text-[#50617A] dark:text-[#94A3B8]">
                 <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-6">
                   <div className="flex flex-col sm:flex-row items-center gap-3">
                     <div className="flex items-center gap-2">

@@ -112,6 +112,22 @@ export async function initDb(): Promise<void> {
       created_at TIMESTAMP NOT NULL
     );
   `);
+
+  // Payment Transactions table
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS payment_transactions (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      plan TEXT NOT NULL,
+      amount INTEGER NOT NULL,
+      currency TEXT NOT NULL DEFAULT 'USD',
+      billing_cycle TEXT NOT NULL DEFAULT 'monthly',
+      payment_provider TEXT NOT NULL DEFAULT 'razorpay',
+      payment_id TEXT NOT NULL UNIQUE,
+      status TEXT NOT NULL DEFAULT 'completed',
+      created_at TIMESTAMP NOT NULL
+    );
+  `);
 }
 
 export const db = new Proxy({} as NeonDatabase<typeof schema>, {

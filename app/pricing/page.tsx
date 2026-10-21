@@ -5,16 +5,18 @@ import { useRouter } from 'next/navigation';
 import { Check, Sparkles, Zap, HelpCircle, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '@/lib/auth/auth-context';
 import { Reveal } from '@/components/ui/reveal';
+import { PaymentModal } from '@/components/payment/payment-modal';
 
 export default function PricingPage() {
   const router = useRouter();
-  const { authenticated, tier, openAuthModal, upgrade } = useAuth();
+  const { authenticated, tier, openAuthModal } = useAuth();
   const [annual, setAnnual] = useState(false);
-  const [upgradingPlan, setUpgradingPlan] = useState<string | null>(null);
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+  const [selectedPlanForPayment, setSelectedPlanForPayment] = useState<'starter' | 'pro'>('starter');
   const [upgradeSuccess, setUpgradeSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSelectPlan = async (planKey: string) => {
+  const handleSelectPlan = (planKey: string) => {
     setError(null);
     setUpgradeSuccess(null);
 
@@ -37,16 +39,24 @@ export default function PricingPage() {
       return;
     }
 
-    // Process upgrade
-    setUpgradingPlan(planKey);
-    const res = await upgrade(planKey as 'starter' | 'pro');
-    setUpgradingPlan(null);
-
-    if (res.success) {
-      setUpgradeSuccess(`Successfully upgraded to ${planKey.toUpperCase()}! Your credits have been replenished.`);
-    } else {
-      setError(res.error || 'Failed to process upgrade');
+    if (tier === planKey) {
+      setError(`You are already subscribed to the ${planKey.toUpperCase()} plan.`);
+      return;
     }
+
+    if (tier === 'pro' && planKey === 'starter') {
+      setError('You are already subscribed to the Pro plan with higher tier benefits.');
+      return;
+    }
+
+    // Open Payment Modal - will NOT add credits directly without completed payment
+    setSelectedPlanForPayment(planKey as 'starter' | 'pro');
+    setPaymentModalOpen(true);
+  };
+
+  const handlePaymentSuccess = (plan: 'starter' | 'pro', creditsAdded: number) => {
+    setPaymentModalOpen(false);
+    setUpgradeSuccess(`Payment verified! Upgraded to ${plan.toUpperCase()} plan. Added ${creditsAdded} generation credits to your account.`);
   };
 
   return (
@@ -203,7 +213,7 @@ export default function PricingPage() {
                 onClick={() => handleSelectPlan('free_user')}
                 className="w-full py-2.5 rounded-md bg-[#533AFD] hover:bg-[#5452FB] active:bg-[#4032C8] text-xs font-semibold text-white transition-all shadow-[0_2px_4px_rgba(83,58,253,0.25)] hover:shadow-[0_4px_10px_rgba(83,58,253,0.35)]"
               >
-                {authenticated ? 'Current Plan' : 'Sign Up Free (Claim 10)'}
+                {!authenticated ? 'Sign Up Free (Claim 10)' : tier === 'free' ? 'Current Plan' : 'Included with ' + tier.toUpperCase()}
               </button>
             </div>
           </div>
@@ -257,10 +267,14 @@ export default function PricingPage() {
             <div className="pt-6">
               <button
                 onClick={() => handleSelectPlan('starter')}
-                disabled={upgradingPlan === 'starter' || tier === 'starter'}
-                className="w-full py-2.5 rounded-md bg-[#0A2540] hover:bg-[#1A2C44] text-xs font-semibold text-white transition-colors disabled:opacity-50 shadow-[0_1px_2px_rgba(50,50,93,0.08)]"
+                disabled={tier === 'starter' || tier === 'pro'}
+                className="w-full py-2.5 rounded-md bg-[#0A2540] hover:bg-[#1A2C44] text-xs font-semibold text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_1px_2px_rgba(50,50,93,0.08)]"
               >
-                {tier === 'starter' ? 'Active Plan' : upgradingPlan === 'starter' ? 'Upgrading...' : 'Get Starter ($2/mo)'}
+                {tier === 'starter'
+                  ? 'Active Plan'
+                  : tier === 'pro'
+                    ? 'Included with Pro'
+                    : `Get Starter (${annual ? '$1.60/mo' : '$2/mo'})`}
               </button>
             </div>
           </div>
@@ -321,10 +335,12 @@ export default function PricingPage() {
             <div className="pt-6">
               <button
                 onClick={() => handleSelectPlan('pro')}
-                disabled={upgradingPlan === 'pro' || tier === 'pro'}
-                className="w-full py-2.5 rounded-md bg-[#533AFD] hover:bg-[#5452FB] text-xs font-semibold text-white transition-all shadow-[0_2px_4px_rgba(83,58,253,0.25)] disabled:opacity-50"
+                disabled={tier === 'pro'}
+                className="w-full py-2.5 rounded-md bg-[#533AFD] hover:bg-[#5452FB] text-xs font-semibold text-white transition-all shadow-[0_2px_4px_rgba(83,58,253,0.25)] disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {tier === 'pro' ? 'Active Plan' : upgradingPlan === 'pro' ? 'Upgrading...' : 'Get Pro ($20/mo)'}
+                {tier === 'pro'
+                  ? 'Active Plan'
+                  : `Get Pro (${annual ? '$16/mo' : '$20/mo'})`}
               </button>
             </div>
           </div>
@@ -431,6 +447,15 @@ export default function PricingPage() {
           </div>
         </div>
       </Reveal>
+
+      {/* Razorpay Sandbox Checkout Modal */}
+      <PaymentModal
+        isOpen={paymentModalOpen}
+        onClose={() => setPaymentModalOpen(false)}
+        plan={selectedPlanForPayment}
+        annual={annual}
+        onSuccess={handlePaymentSuccess}
+      />
     </div>
   );
 }

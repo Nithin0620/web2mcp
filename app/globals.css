@@ -146,6 +146,65 @@ h1, h2, h3, h4, h5, h6 {
   animation: float-reverse 8s ease-in-out infinite;
 }
 
+/* Ambient Blurred Colorful Bubble Animations */
+@keyframes bubble-drift-1 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(55px, -40px, 0) scale(1.1);
+  }
+  66% {
+    transform: translate3d(-30px, 30px, 0) scale(0.94);
+  }
+}
+
+@keyframes bubble-drift-2 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(-65px, 35px, 0) scale(1.08);
+  }
+  66% {
+    transform: translate3d(40px, -25px, 0) scale(0.95);
+  }
+}
+
+@keyframes bubble-drift-3 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(0.96);
+  }
+  50% {
+    transform: translate3d(-35px, -50px, 0) scale(1.12);
+  }
+}
+
+@keyframes bubble-drift-4 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(45px, 35px, 0) scale(1.08);
+  }
+}
+
+.animate-bubble-1 {
+  animation: bubble-drift-1 16s ease-in-out infinite;
+}
+
+.animate-bubble-2 {
+  animation: bubble-drift-2 20s ease-in-out infinite;
+}
+
+.animate-bubble-3 {
+  animation: bubble-drift-3 18s ease-in-out infinite;
+}
+
+.animate-bubble-4 {
+  animation: bubble-drift-4 22s ease-in-out infinite;
+}
+
 .animate-pulse-subtle {
   animation: pulse-subtle 4s ease-in-out infinite;
 }

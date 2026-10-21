@@ -11,6 +11,14 @@ export interface User {
   creditsUsed: number;
 }
 
+export interface UpgradePayload {
+  plan: 'starter' | 'pro';
+  paymentId?: string;
+  billingCycle?: 'monthly' | 'annual';
+  paymentMethod?: string;
+  amount?: number;
+}
+
 interface AuthContextType {
   user: User | null;
   authenticated: boolean;
@@ -25,7 +33,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   register: (name: string, email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
-  upgrade: (plan: 'starter' | 'pro') => Promise<{ success: boolean; error?: string }>;
+  upgrade: (params: 'starter' | 'pro' | UpgradePayload) => Promise<{ success: boolean; error?: string; creditsRemaining?: number; message?: string }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -116,19 +124,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const upgrade = async (plan: 'starter' | 'pro') => {
+  const upgrade = async (params: 'starter' | 'pro' | UpgradePayload) => {
     try {
+      const payload = typeof params === 'string' ? { plan: params } : params;
       const res = await fetch('/api/auth/upgrade', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan }),
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
       if (!res.ok) {
         return { success: false, error: data.error || 'Upgrade failed' };
       }
       await refreshAuth();
-      return { success: true };
+      return {
+        success: true,
+        creditsRemaining: data.creditsRemaining,
+        message: data.message,
+      };
     } catch (err) {
       return { success: false, error: 'Network error during upgrade' };
     }

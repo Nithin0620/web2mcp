@@ -11,15 +11,19 @@ import {
   CheckCircle2,
   Lock,
   ChevronRight,
-  Cpu,
-  Code2,
   Wrench,
+  Zap,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Reveal } from '@/components/ui/reveal';
 import { initDb, db } from '@/lib/db/client';
 import { projects, tools } from '@/lib/db/schema';
+import { HeroInput } from '@/components/home/hero-input';
+import { ToolEcosystem } from '@/components/home/tool-ecosystem';
+import { StepSequence } from '@/components/home/step-sequence';
+import { InteractiveDemo } from '@/components/home/interactive-demo';
+import { FaqAccordion } from '@/components/home/faq-accordion';
+import { CtaBanner } from '@/components/home/cta-banner';
 
 export default async function HomePage() {
   await initDb();
@@ -27,311 +31,150 @@ export default async function HomePage() {
   const allTools = await db.select().from(tools);
 
   // Filter out internal test runner artifacts to feature authentic, user-generated MCP servers
-  const cleanProjects = allProjects.filter(
-    (p) =>
-      !p.id.startsWith('test-') &&
-      !p.id.includes('val-') &&
-      !p.id.includes('e2e-') &&
-      !p.id.startsWith('proj-mcp-')
-  ).reverse();
+  const cleanProjects = allProjects
+    .filter(
+      (p) =>
+        !p.id.startsWith('test-') &&
+        !p.id.includes('val-') &&
+        !p.id.includes('e2e-') &&
+        !p.id.startsWith('proj-mcp-')
+    )
+    .reverse();
 
   const displayProjects = cleanProjects.length > 0 ? cleanProjects : allProjects.slice(0, 6);
 
   return (
-    <div className="space-y-24 pb-28 bg-transparent text-[#061B31] dark:text-[#F8FAFC] overflow-hidden">
-      {/* Stripe Hero Section with Ambient Floating Gradients */}
-      <section className="relative pt-24 pb-20 overflow-hidden border-b border-[#E5EDF5] bg-gradient-to-b from-[#F8FAFD] via-white to-white">
-        {/* Ambient floating mesh orbs */}
-        <div className="absolute top-12 left-1/4 w-96 h-96 bg-[#533AFD]/5 rounded-full blur-3xl pointer-events-none animate-float-slow" />
-        <div className="absolute top-28 right-1/4 w-80 h-80 bg-[#635BFF]/5 rounded-full blur-3xl pointer-events-none animate-float-reverse" />
+    <div className="space-y-24 sm:space-y-32 pb-28 bg-transparent text-[#061B31] dark:text-[#F8FAFC] overflow-hidden">
+      {/* ============================================================
+          HERO SECTION (High-Craft Editorial & Live Input)
+          Kept clean and out of the background particle animation
+          ============================================================ */}
+      <section className="relative z-20 pt-20 sm:pt-28 pb-16 sm:pb-24 border-b border-[#E5EDF5] dark:border-[#1E293B] bg-gradient-to-b from-[#F8FAFD] via-white to-white dark:from-[#070B14] dark:via-[#0A0F1D] dark:to-[#0A0F1D] overflow-hidden shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)]">
+        {/* Ambient Faded Blurred Colorful Moving Bubbles */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {/* Bubble 1: Vibrant Indigo / Violet (Top-Left) */}
+          <div className="absolute -top-12 left-[10%] w-[26rem] h-[26rem] sm:w-[32rem] sm:h-[32rem] rounded-full bg-gradient-to-tr from-[#635BFF] to-[#8B5CF6] opacity-25 dark:opacity-30 blur-[90px] animate-bubble-1 mix-blend-multiply dark:mix-blend-screen" />
 
-        <div className="max-w-5xl mx-auto px-4 text-center relative z-10 space-y-7">
-          {/* Badge with subtle shimmer */}
+          {/* Bubble 2: Warm Rose / Coral / Pink (Top-Right) */}
+          <div className="absolute -top-16 right-[12%] w-[24rem] h-[24rem] sm:w-[30rem] sm:h-[30rem] rounded-full bg-gradient-to-br from-[#EC4899] to-[#F43F5E] opacity-20 dark:opacity-25 blur-[90px] animate-bubble-2 mix-blend-multiply dark:mix-blend-screen" />
+
+          {/* Bubble 3: Electric Cyan / Sky Blue (Center / Mid-Left) */}
+          <div className="absolute top-40 left-[26%] w-[22rem] h-[22rem] sm:w-[28rem] sm:h-[28rem] rounded-full bg-gradient-to-r from-[#00D4FF] to-[#06B6D4] opacity-20 dark:opacity-25 blur-[95px] animate-bubble-3 mix-blend-multiply dark:mix-blend-screen" />
+
+          {/* Bubble 4: Soft Emerald / Violet (Mid-Right / Lower) */}
+          <div className="absolute top-44 right-[22%] w-[20rem] h-[20rem] sm:w-[26rem] sm:h-[26rem] rounded-full bg-gradient-to-tl from-[#10B981] to-[#635BFF] opacity-15 dark:opacity-20 blur-[100px] animate-bubble-4 mix-blend-multiply dark:mix-blend-screen" />
+        </div>
+
+        <div className="max-w-5xl mx-auto px-4 text-center relative z-10 space-y-8">
+          {/* Eyebrow Pill */}
           <Reveal animation="fade-down" delay={50}>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#D6D9FC] bg-white text-xs text-[#533AFD] font-medium shadow-[0_1px_2px_rgba(50,50,93,0.06)] animate-shimmer">
-              <Sparkles className="h-3.5 w-3.5 text-[#533AFD]" />
-              <span>TinyFish Browser Agent + Model Context Protocol (MCP)</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#D6D9FC] dark:border-[#312E81] bg-white/80 dark:bg-[#131E35]/80 backdrop-blur-sm text-xs text-[#533AFD] dark:text-[#A5B4FC] font-semibold tracking-wide shadow-[0_1px_2px_rgba(50,50,93,0.06)] animate-shimmer">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#533AFD] dark:bg-[#818CF8] animate-pulse" />
+              <span>THE LIVE WEB & DOCUMENTATION LAYER FOR AI</span>
             </div>
           </Reveal>
 
-          {/* Söhne Display Headline with tight tracking */}
-          <Reveal animation="fade-up" delay={150}>
-            <h1 className="text-4xl sm:text-6xl font-medium tracking-tight text-[#0A2540] leading-[1.12]">
-              Turn Any Website into <br className="hidden sm:inline" />
-              <span className="bg-gradient-to-r from-[#533AFD] via-[#635BFF] to-[#2E2B8C] bg-clip-text text-transparent font-semibold">
-                Live, Verified MCP Tools
-              </span>{' '}
-              for AI Agents
+          {/* Söhne / Grotesque Display Headline */}
+          <Reveal animation="fade-up" delay={120}>
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-[#0A2540] dark:text-white leading-[1.08] max-w-4xl mx-auto">
+              Great work starts <br />
+              <span className="bg-gradient-to-r from-[#533AFD] via-[#635BFF] to-[#00D4FF] bg-clip-text text-transparent">
+                with the right context.
+              </span>
             </h1>
           </Reveal>
 
+          {/* Layered Sub-phrases (Trust, Tools, Answers) */}
+          <Reveal animation="fade-up" delay={180}>
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium text-[#50617A] dark:text-[#94A3B8]">
+              <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F8FAFD] dark:bg-[#131E35] border border-[#E5EDF5] dark:border-[#1E293B]">
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                docs you can trust.
+              </span>
+              <span className="hidden sm:inline text-[#CFD8E3] dark:text-[#334155]">·</span>
+              <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F8FAFD] dark:bg-[#131E35] border border-[#E5EDF5] dark:border-[#1E293B]">
+                <Sparkles className="h-3.5 w-3.5 text-[#533AFD] dark:text-[#A5B4FC]" />
+                live tools that take action.
+              </span>
+              <span className="hidden sm:inline text-[#CFD8E3] dark:text-[#334155]">·</span>
+              <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F8FAFD] dark:bg-[#131E35] border border-[#E5EDF5] dark:border-[#1E293B]">
+                <Zap className="h-3.5 w-3.5 text-amber-500" />
+                answers that help.
+              </span>
+            </div>
+          </Reveal>
+
           {/* Subtitle */}
-          <Reveal animation="fade-up" delay={250}>
-            <p className="max-w-2xl mx-auto text-base sm:text-lg text-[#3C4F69] leading-relaxed font-normal">
-              Websites are built for humans, not agents. Web2MCP autonomously navigates forms, infers typed schemas, verifies live responses against saved evidence, and generates hosted & stdio MCP servers in minutes.
+          <Reveal animation="fade-up" delay={220}>
+            <p className="max-w-2xl mx-auto text-sm sm:text-base text-[#3C4F69] dark:text-[#CBD5E1] leading-relaxed font-normal">
+              Turn any documentation or website URL into an MCP source. Give your AI the pages, code, and context it needs to build.
             </p>
           </Reveal>
 
-          {/* CTA & CLI Command */}
-          <Reveal animation="fade-up" delay={350}>
-            <div className="pt-3 flex flex-col sm:flex-row items-center justify-center gap-3.5">
-              <Link href="/projects/new">
-                <Button size="lg" className="gap-2 font-medium bg-[#533AFD] hover:bg-[#5452FB] active:bg-[#4032C8] text-white shadow-[0_4px_12px_rgba(83,58,253,0.3)] transition-all hover:-translate-y-0.5 rounded-md px-6">
-                  Explore Website & Generate Tools <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
-              <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-md border border-[#E5EDF5] bg-white font-mono text-xs text-[#061B31] shadow-[0_1px_2px_rgba(50,50,93,0.05)] transition-all hover:border-[#CFD8E3]">
-                <Terminal className="h-3.5 w-3.5 text-[#533AFD]" /> npx web2mcp add &lt;url&gt;
-              </div>
-            </div>
-          </Reveal>
-
-          {/* Hero Interactive Terminal & Protocol Preview Card */}
-          <Reveal animation="scale-up" delay={450}>
-            <div className="mt-12 max-w-3xl mx-auto rounded-lg border border-[#E5EDF5] bg-white shadow-[0_13px_27px_-5px_rgba(50,50,93,0.1),0_8px_16px_-8px_rgba(0,0,0,0.06)] overflow-hidden text-left stripe-hover-card">
-              <div className="bg-[#F8FAFD] border-b border-[#E5EDF5] px-4 py-2.5 flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <div className="h-3 w-3 rounded-full bg-rose-400/80" />
-                  <div className="h-3 w-3 rounded-full bg-amber-400/80" />
-                  <div className="h-3 w-3 rounded-full bg-emerald-400/80" />
-                  <span className="ml-2 font-mono text-xs text-[#50617A]">
-                    MCP Streamable JSON-RPC 2.0 Live Protocol
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="flex h-2 w-2 relative">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-                  </span>
-                  <span className="text-[11px] font-mono text-emerald-700 font-semibold">Active Endpoint</span>
-                </div>
-              </div>
-              <div className="p-4 sm:p-5 font-mono text-xs text-[#061B31] bg-white space-y-3">
-                <div className="flex items-center gap-2 text-[#50617A] text-[11px]">
-                  <span className="font-bold text-[#533AFD]">POST</span> /api/mcp/news-ycombinator/mcp
-                  <span className="text-[#94A3B8]">·</span>
-                  <span className="text-emerald-700 font-medium">200 OK (84ms)</span>
-                </div>
-                <pre className="p-3 bg-[#0A2540] text-[#D6D9FC] rounded-md overflow-x-auto text-[11px] leading-relaxed">
-{`{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "result": {
-    "tools": [
-      { "name": "search_news", "category": "search", "riskLevel": "read_only" },
-      { "name": "get_item_details", "category": "details", "riskLevel": "read_only" }
-    ],
-    "protocolVersion": "2024-11-05"
-  }
-}`}
-                </pre>
-              </div>
-            </div>
+          {/* Interactive URL Input & Example Chips */}
+          <Reveal animation="fade-up" delay={300}>
+            <HeroInput />
           </Reveal>
         </div>
       </section>
 
-      {/* 3-Step Interactive Pipeline with Staggered Scroll Delays */}
-      <section id="how-it-works" className="max-w-6xl mx-auto px-4 scroll-mt-24 space-y-12">
-        <Reveal animation="fade-up" delay={50}>
-          <div className="text-center space-y-2 mb-12">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D6D9FC]/40 text-[#533AFD] text-xs font-semibold border border-[#D6D9FC]">
-              Step-by-Step Architecture
-            </div>
-            <h2 className="text-3xl font-bold text-[#0A2540]">How Web2MCP Works</h2>
-            <p className="text-sm text-[#50617A]">From a raw human portal to an authenticated Model Context Protocol tool</p>
-          </div>
-        </Reveal>
+      {/* ============================================================
+          ONE SOURCE. YOUR FAVORITE TOOLS. (Ecosystem Bar)
+          ============================================================ */}
+      <Reveal animation="fade-up" delay={100}>
+        <ToolEcosystem />
+      </Reveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Reveal animation="fade-up" delay={100}>
-            <div className="rounded-lg border border-[#E5EDF5] bg-[#F8FAFD] p-6 space-y-3.5 relative overflow-hidden group stripe-hover-card shadow-[0_2px_4px_rgba(50,50,93,0.04)] h-full flex flex-col justify-between">
-              <div className="space-y-3">
-                <div className="h-10 w-10 rounded-md bg-white border border-[#D6D9FC] flex items-center justify-center text-[#533AFD] font-bold text-sm shadow-[0_1px_2px_rgba(83,58,253,0.1)]">
-                  1
-                </div>
-                <h3 className="font-semibold text-lg text-[#0A2540]">Autonomous Web Exploration</h3>
-                <p className="text-xs text-[#3C4F69] leading-relaxed">
-                  TinyFish browser agents navigate complex SPAs, exercise search filters, detect form inputs, and inspect dynamic responses with anti-bot resilience.
-                </p>
-              </div>
-              <div className="pt-3 border-t border-[#E5EDF5] text-xs font-mono text-[#533AFD] flex items-center gap-1.5">
-                <Globe className="h-3.5 w-3.5" /> Portal & DOM Extraction
-              </div>
-            </div>
-          </Reveal>
+      {/* ============================================================
+          A SMALL INPUT. A BETTER START. (Numbered Sequence 01, 02, 03)
+          ============================================================ */}
+      <Reveal animation="fade-up" delay={120}>
+        <StepSequence />
+      </Reveal>
 
-          <Reveal animation="fade-up" delay={250}>
-            <div className="rounded-lg border border-[#E5EDF5] bg-[#F8FAFD] p-6 space-y-3.5 relative overflow-hidden group stripe-hover-card shadow-[0_2px_4px_rgba(50,50,93,0.04)] h-full flex flex-col justify-between">
-              <div className="space-y-3">
-                <div className="h-10 w-10 rounded-md bg-white border border-[#D6D9FC] flex items-center justify-center text-[#533AFD] font-bold text-sm shadow-[0_1px_2px_rgba(83,58,253,0.1)]">
-                  2
-                </div>
-                <h3 className="font-semibold text-lg text-[#0A2540]">AI Schema Inference & Safety Gate</h3>
-                <p className="text-xs text-[#3C4F69] leading-relaxed">
-                  LLMs analyze observed fields to synthesize typed JSON Schemas. Consequential actions (bookings, purchases) are classified with human confirmation gates.
-                </p>
-              </div>
-              <div className="pt-3 border-t border-[#E5EDF5] text-xs font-mono text-[#533AFD] flex items-center gap-1.5">
-                <Cpu className="h-3.5 w-3.5" /> Typed Schemas & Approval Gates
-              </div>
-            </div>
-          </Reveal>
+      {/* ============================================================
+          BUILT FOR THE WORK BETWEEN THE LINES (Interactive Result Mockup)
+          ============================================================ */}
+      <Reveal animation="fade-up" delay={120}>
+        <InteractiveDemo />
+      </Reveal>
 
-          <Reveal animation="fade-up" delay={400}>
-            <div className="rounded-lg border border-[#E5EDF5] bg-[#F8FAFD] p-6 space-y-3.5 relative overflow-hidden group stripe-hover-card shadow-[0_2px_4px_rgba(50,50,93,0.04)] h-full flex flex-col justify-between">
-              <div className="space-y-3">
-                <div className="h-10 w-10 rounded-md bg-white border border-emerald-200 flex items-center justify-center text-emerald-700 font-bold text-sm shadow-[0_1px_2px_rgba(16,185,129,0.1)]">
-                  3
-                </div>
-                <h3 className="font-semibold text-lg text-[#0A2540]">Live Validation & Evidence Vault</h3>
-                <p className="text-xs text-[#3C4F69] leading-relaxed">
-                  Synthetic probes test real pages before deployment. Every run captures an immutable DOM hash and payload trace to instantly detect website redesign drift.
-                </p>
-              </div>
-              <div className="pt-3 border-t border-[#E5EDF5] text-xs font-mono text-emerald-700 flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5" /> Continuous Health & Drift Detection
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Platform Features Section with Staggered Grid */}
-      <section id="features" className="max-w-6xl mx-auto px-4 scroll-mt-24 space-y-12">
-        <Reveal animation="fade-up" delay={50}>
-          <div className="text-center space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D6D9FC]/40 text-[#533AFD] text-xs font-semibold border border-[#D6D9FC]">
-              Enterprise-Grade Platform
-            </div>
-            <h2 className="text-3xl font-bold text-[#0A2540]">Production-Ready MCP Capabilities</h2>
-            <p className="text-sm text-[#50617A]">Everything AI agents need to operate human websites reliably.</p>
-          </div>
-        </Reveal>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Reveal animation="fade-up" delay={100}>
-            <div className="p-6 rounded-lg bg-white border border-[#E5EDF5] space-y-3 stripe-hover-card shadow-[0_2px_4px_rgba(50,50,93,0.04)] h-full">
-              <div className="h-10 w-10 rounded-md bg-[#F8FAFD] border border-[#E5EDF5] text-[#533AFD] flex items-center justify-center font-bold">
-                <Layers className="h-5 w-5" />
-              </div>
-              <h3 className="font-semibold text-[#0A2540] text-base">Streamable HTTP Transport</h3>
-              <p className="text-xs text-[#3C4F69] leading-relaxed">
-                Standard JSON-RPC 2.0 streaming endpoints compliant with the 2024-11-05 & 2025-11-25 MCP specifications.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal animation="fade-up" delay={180}>
-            <div className="p-6 rounded-lg bg-white border border-[#E5EDF5] space-y-3 stripe-hover-card shadow-[0_2px_4px_rgba(50,50,93,0.04)] h-full">
-              <div className="h-10 w-10 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center font-bold">
-                <Activity className="h-5 w-5" />
-              </div>
-              <h3 className="font-semibold text-[#0A2540] text-base">Evidence Vault Auditing</h3>
-              <p className="text-xs text-[#3C4F69] leading-relaxed">
-                Every synthetic probe captures execution traces and DOM hashes so you know when a target site changes structure.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal animation="fade-up" delay={260}>
-            <div className="p-6 rounded-lg bg-white border border-[#E5EDF5] space-y-3 stripe-hover-card shadow-[0_2px_4px_rgba(50,50,93,0.04)] h-full">
-              <div className="h-10 w-10 rounded-md bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center font-bold">
-                <Shield className="h-5 w-5" />
-              </div>
-              <h3 className="font-semibold text-[#0A2540] text-base">Two-Phase Safety Gate</h3>
-              <p className="text-xs text-[#3C4F69] leading-relaxed">
-                Automatic interception for consequential actions (orders, payments) requiring human token authorization.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal animation="fade-up" delay={340}>
-            <div className="p-6 rounded-lg bg-white border border-[#E5EDF5] space-y-3 stripe-hover-card shadow-[0_2px_4px_rgba(50,50,93,0.04)] h-full">
-              <div className="h-10 w-10 rounded-md bg-[#F8FAFD] border border-[#E5EDF5] text-[#533AFD] flex items-center justify-center font-bold">
-                <Terminal className="h-5 w-5" />
-              </div>
-              <h3 className="font-semibold text-[#0A2540] text-base">1-Click IDE Installers</h3>
-              <p className="text-xs text-[#3C4F69] leading-relaxed">
-                Install generated servers directly into Cursor, Claude Desktop, and VS Code with a single CLI command.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal animation="fade-up" delay={420}>
-            <div className="p-6 rounded-lg bg-white border border-[#E5EDF5] space-y-3 stripe-hover-card shadow-[0_2px_4px_rgba(50,50,93,0.04)] h-full">
-              <div className="h-10 w-10 rounded-md bg-cyan-50 border border-cyan-200 text-cyan-700 flex items-center justify-center font-bold">
-                <Globe className="h-5 w-5" />
-              </div>
-              <h3 className="font-semibold text-[#0A2540] text-base">TinyFish Cloud Automation</h3>
-              <p className="text-xs text-[#3C4F69] leading-relaxed">
-                Cloud browser agents navigate complex SPAs, solve multi-step forms, and maintain authenticated sessions.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal animation="fade-up" delay={500}>
-            <div className="p-6 rounded-lg bg-white border border-[#E5EDF5] space-y-3 stripe-hover-card shadow-[0_2px_4px_rgba(50,50,93,0.04)] h-full">
-              <div className="h-10 w-10 rounded-md bg-[#F8FAFD] border border-[#D6D9FC] text-[#533AFD] flex items-center justify-center font-bold">
-                <Sparkles className="h-5 w-5" />
-              </div>
-              <h3 className="font-semibold text-[#0A2540] text-base">Free Tier & Micro-Pricing</h3>
-              <p className="text-xs text-[#3C4F69] leading-relaxed">
-                3 free generations as a guest, 10 on signup, and affordable $2 Starter and $20 Pro tiers with generous quotas.
-              </p>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Safety Gate Alert Banner with Reveal */}
-      <section className="max-w-6xl mx-auto px-4">
-        <Reveal animation="scale-up" delay={150}>
-          <div className="rounded-lg border border-amber-200 bg-amber-50/70 p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-[0_1px_2px_rgba(50,50,93,0.04)] stripe-hover-card">
-            <div className="flex items-start gap-3.5">
-              <div className="h-10 w-10 rounded-md bg-amber-100 border border-amber-300 flex items-center justify-center text-amber-700 shrink-0 mt-0.5">
-                <Lock className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="text-base font-semibold text-[#0A2540]">
-                  Human-in-the-Loop Safety Gate
-                </h3>
-                <p className="text-xs text-[#3C4F69] mt-1 max-w-2xl leading-relaxed">
-                  Agents are powerful, but consequential operations shouldn&apos;t run wild. Any generated tool performing bookings, transactions, or state mutations requires explicit confirmation before executing.
-                </p>
-              </div>
-            </div>
-            <Badge variant="warning" className="shrink-0 text-xs font-medium">
-              Zero Unintended Actions
-            </Badge>
-          </div>
-        </Reveal>
-      </section>
-
-      {/* Active Projects Directory with Showcased Generated Tools */}
+      {/* ============================================================
+          ACTIVE SHOWCASE: LIVE MCP SERVERS
+          ============================================================ */}
       <section className="max-w-6xl mx-auto px-4 space-y-6">
         <Reveal animation="fade-up" delay={50}>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="text-xl font-bold text-[#0A2540]">Generated MCP Projects</h2>
-              <p className="text-xs text-[#50617A]">
-                Live websites currently exposed as verified MCP servers with generated tools
+              <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-[#533AFD] dark:text-[#A5B4FC] font-semibold">
+                LIVE MCP SOURCE REGISTRY
+              </p>
+              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#0A2540] dark:text-white">
+                Generated MCP Projects
+              </h2>
+              <p className="text-xs text-[#50617A] dark:text-[#94A3B8]">
+                Websites and docs exposed as verified Model Context Protocol tools with evidence vaults
               </p>
             </div>
-            <Link href="/projects/new">
-              <Button size="sm" variant="outline" className="gap-1.5 text-xs hover:border-[#533AFD] transition-all">
-                <Sparkles className="h-3 w-3" /> New Website
-              </Button>
+            <Link
+              href="/projects/new"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-[#E5EDF5] dark:border-[#1E293B] bg-white dark:bg-[#111827] text-xs font-semibold text-[#0A2540] dark:text-white hover:border-[#533AFD] transition-all shadow-[0_1px_2px_rgba(50,50,93,0.04)]"
+            >
+              <Sparkles className="h-3 w-3 text-[#533AFD]" />
+              <span>Convert New URL</span>
             </Link>
           </div>
         </Reveal>
 
         {displayProjects.length === 0 ? (
           <Reveal animation="fade-up" delay={150}>
-            <div className="p-12 text-center rounded-lg border border-[#E5EDF5] bg-[#F8FAFD] space-y-3">
-              <p className="text-sm text-[#50617A]">No websites converted yet.</p>
-              <Link href="/projects/new">
-                <Button size="sm">Convert Your First Website</Button>
+            <div className="p-12 text-center rounded-2xl border border-[#E5EDF5] dark:border-[#1E293B] bg-[#F8FAFD] dark:bg-[#0D1527] space-y-3">
+              <p className="text-sm text-[#50617A] dark:text-[#94A3B8]">No websites converted yet.</p>
+              <Link
+                href="/projects/new"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#533AFD] text-white text-xs font-semibold"
+              >
+                Convert Your First Website
               </Link>
             </div>
           </Reveal>
@@ -343,12 +186,12 @@ export default async function HomePage() {
 
               return (
                 <Reveal key={p.id} animation="fade-up" delay={idx * 80}>
-                  <div className="rounded-lg border border-[#E5EDF5] bg-white p-5 hover:border-[#533AFD] stripe-hover-card flex flex-col justify-between group space-y-4 shadow-[0_2px_4px_rgba(50,50,93,0.04)] h-full">
+                  <div className="rounded-2xl border border-[#E5EDF5] dark:border-[#1E293B] bg-white dark:bg-[#0D1527] p-5 sm:p-6 hover:border-[#533AFD] dark:hover:border-[#818CF8] stripe-hover-card flex flex-col justify-between group space-y-4 shadow-[0_2px_4px_rgba(50,50,93,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.4)] h-full">
                     {/* Project Header */}
                     <div>
                       <div className="flex items-center justify-between">
-                        <Link href={`/projects/${p.id}`} className="group-hover:text-[#533AFD] transition-colors">
-                          <h3 className="font-semibold text-base text-[#0A2540] group-hover:text-[#533AFD] transition-colors flex items-center gap-2">
+                        <Link href={`/projects/${p.id}`} className="group-hover:text-[#533AFD] dark:group-hover:text-[#A5B4FC] transition-colors">
+                          <h3 className="font-semibold text-base text-[#0A2540] dark:text-white group-hover:text-[#533AFD] dark:group-hover:text-[#A5B4FC] transition-colors flex items-center gap-2">
                             {p.name}
                           </h3>
                         </Link>
@@ -361,7 +204,7 @@ export default async function HomePage() {
                         href={p.targetUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-xs text-[#50617A] hover:text-[#533AFD] flex items-center gap-1 font-mono mt-1 truncate"
+                        className="text-xs text-[#50617A] dark:text-[#94A3B8] hover:text-[#533AFD] dark:hover:text-[#A5B4FC] flex items-center gap-1 font-mono mt-1.5 truncate"
                       >
                         <Globe className="h-3 w-3 shrink-0" />
                         <span className="truncate">{p.targetUrl}</span>
@@ -370,12 +213,12 @@ export default async function HomePage() {
 
                     {/* Showcased Generated Tools List */}
                     <div className="space-y-2 py-1">
-                      <div className="flex items-center justify-between text-[11px] text-[#64748D] uppercase tracking-wider font-semibold">
+                      <div className="flex items-center justify-between text-[11px] text-[#64748D] dark:text-[#94A3B8] uppercase tracking-wider font-semibold">
                         <span className="flex items-center gap-1">
-                          <Wrench className="h-3 w-3 text-[#533AFD]" /> Generated MCP Tools ({projectTools.length})
+                          <Wrench className="h-3 w-3 text-[#533AFD] dark:text-[#A5B4FC]" /> Generated Tools ({projectTools.length})
                         </span>
                         {consequentialCount > 0 && (
-                          <span className="text-amber-700 font-medium normal-case text-[10px] bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
+                          <span className="text-amber-700 dark:text-amber-400 font-medium normal-case text-[10px] bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-200 dark:border-amber-800">
                             {consequentialCount} approval gated
                           </span>
                         )}
@@ -385,26 +228,26 @@ export default async function HomePage() {
                         <p className="text-xs text-[#94A3B8] italic">No tools generated yet.</p>
                       ) : (
                         <div className="space-y-1.5">
-                          {projectTools.map((t) => (
+                          {projectTools.slice(0, 3).map((t) => (
                             <div
                               key={t.id}
-                              className="p-2.5 rounded-md bg-[#F8FAFD] border border-[#E5EDF5] hover:border-[#D6D9FC] transition-colors flex items-start justify-between gap-2"
+                              className="p-2.5 rounded-lg bg-[#F8FAFD] dark:bg-[#131E35] border border-[#E5EDF5] dark:border-[#1E293B] flex items-start justify-between gap-2"
                             >
                               <div className="space-y-0.5 min-w-0">
                                 <div className="flex items-center gap-1.5">
-                                  <span className="font-mono text-xs font-semibold text-[#533AFD]">
+                                  <span className="font-mono text-xs font-semibold text-[#533AFD] dark:text-[#A5B4FC]">
                                     {t.name}()
                                   </span>
-                                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-white border border-[#E5EDF5] text-[#50617A] uppercase font-mono">
+                                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-white dark:bg-[#0D1527] border border-[#E5EDF5] dark:border-[#1E293B] text-[#50617A] dark:text-[#94A3B8] uppercase font-mono">
                                     {t.category}
                                   </span>
                                   {t.requiresApproval && (
-                                    <span className="text-[9px] px-1 py-0.2 rounded bg-rose-50 border border-rose-200 text-rose-700 font-semibold uppercase">
+                                    <span className="text-[9px] px-1 py-0.2 rounded bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-400 font-semibold uppercase">
                                       Gated
                                     </span>
                                   )}
                                 </div>
-                                <p className="text-[11px] text-[#50617A] line-clamp-1 leading-snug">
+                                <p className="text-[11px] text-[#50617A] dark:text-[#94A3B8] line-clamp-1 leading-snug">
                                   {t.description}
                                 </p>
                               </div>
@@ -415,16 +258,16 @@ export default async function HomePage() {
                     </div>
 
                     {/* Streamable HTTP Endpoint & Quick Actions */}
-                    <div className="pt-3 border-t border-[#E5EDF5] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-                      <div className="font-mono text-[11px] text-[#50617A] bg-[#F8FAFD] border border-[#E5EDF5] px-2 py-1 rounded truncate max-w-full sm:max-w-[260px]">
-                        <span className="text-[#533AFD] font-bold">POST</span> /api/mcp/{p.id}/mcp
+                    <div className="pt-3 border-t border-[#E5EDF5] dark:border-[#1E293B] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                      <div className="font-mono text-[11px] text-[#50617A] dark:text-[#94A3B8] bg-[#F8FAFD] dark:bg-[#131E35] border border-[#E5EDF5] dark:border-[#1E293B] px-2 py-1 rounded truncate max-w-full sm:max-w-[260px]">
+                        <span className="text-[#533AFD] dark:text-[#A5B4FC] font-bold">POST</span> /api/mcp/{p.id}/mcp
                       </div>
 
                       <Link
                         href={`/projects/${p.id}`}
-                        className="inline-flex items-center gap-1 text-xs font-semibold text-[#533AFD] hover:text-[#5452FB] transition-colors shrink-0"
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-[#533AFD] dark:text-[#A5B4FC] hover:text-[#5452FB] transition-colors shrink-0"
                       >
-                        Open Dashboard & Playground <ChevronRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
+                        Playground <ChevronRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
                       </Link>
                     </div>
                   </div>
@@ -434,6 +277,20 @@ export default async function HomePage() {
           </div>
         )}
       </section>
+
+      {/* ============================================================
+          BEFORE YOU GET STARTED (Interactive Collapsible FAQ)
+          ============================================================ */}
+      <Reveal animation="fade-up" delay={100}>
+        <FaqAccordion />
+      </Reveal>
+
+      {/* ============================================================
+          YOUR NEXT IDEA DESERVES GOOD CONTEXT (Final CTA Banner)
+          ============================================================ */}
+      <Reveal animation="fade-up" delay={100}>
+        <CtaBanner />
+      </Reveal>
     </div>
   );
 }
