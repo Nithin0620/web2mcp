@@ -3,8 +3,7 @@ import { drizzle, type NeonDatabase } from 'drizzle-orm/neon-serverless';
 import * as schema from './schema';
 
 const DB_URL =
-  process.env.DATABASE_URL ||
-  'postgresql://neondb_owner:npg_nutzI7W2Sdml@ep-calm-thunder-aouhth7a-pooler.c-2.ap-southeast-1.aws.neon.tech/neondb?sslmode=require';
+  process.env.DATABASE_URL;
 
 let poolInstance: Pool | null = null;
 let dbInstance: NeonDatabase<typeof schema> | null = null;
