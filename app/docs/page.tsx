@@ -382,30 +382,183 @@ export default function DocsPage() {
                 <h2 className="text-2xl font-bold text-[#0A2540] tracking-tight mt-1">
                   Standalone CLI Reference
                 </h2>
-                <p className="text-[#50617A] text-sm mt-2">
-                  Use <code>web2mcp</code> directly from your terminal or CI/CD pipelines.
+                <p className="text-[#50617A] text-sm mt-2 leading-relaxed">
+                  The <code>web2mcp</code> CLI provides powerful commands to discover, test, serve, and configure MCP servers directly from your terminal or CI/CD pipelines.
                 </p>
               </div>
 
-              <div className="space-y-3 text-xs">
-                <div className="p-3.5 rounded-lg bg-[#F8FAFD] border border-[#E5EDF5] space-y-1 shadow-[0_1px_2px_rgba(50,50,93,0.04)] stripe-hover-card">
-                  <p className="font-mono text-[#533AFD] font-bold">web2mcp add &lt;url&gt; [--goal &quot;...&quot;]</p>
-                  <p className="text-[#50617A]">Dispatches crawler, creates project, infers tools, and outputs live endpoint.</p>
+              <div className="space-y-6 text-xs">
+                {/* web2mcp add */}
+                <div className="p-5 rounded-lg bg-white border border-[#E5EDF5] space-y-3 shadow-[0_2px_4px_rgba(50,50,93,0.05)] stripe-hover-card">
+                  <div className="flex items-center justify-between">
+                    <div className="font-mono text-sm font-bold text-[#0A2540] flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded bg-[#F0F3FF] text-[#533AFD] text-xs">add</span>
+                      <code>web2mcp add &lt;url&gt;</code>
+                    </div>
+                    <button
+                      onClick={() =>
+                        copyToClipboard(
+                          'web2mcp add https://example.com/flights --goal "Search flights and fares"',
+                          'cli-add-cmd'
+                        )
+                      }
+                      className="text-xs text-[#50617A] hover:text-[#0A2540] flex items-center gap-1 transition-colors"
+                    >
+                      {copiedKey === 'cli-add-cmd' ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
+                      <span>{copiedKey === 'cli-add-cmd' ? 'Copied' : 'Copy'}</span>
+                    </button>
+                  </div>
+                  <p className="text-[#50617A] text-xs leading-relaxed">
+                    Dispatches the crawler to explore a website, infer schema parameters with AI, execute initial probe tests, and register live MCP tools.
+                  </p>
+                  <div className="space-y-1.5 pt-1">
+                    <p className="font-semibold text-[#0A2540] text-[11px]">Options & Flags:</p>
+                    <ul className="space-y-1 text-[#50617A] font-mono text-[11px] list-disc list-inside">
+                      <li><span className="font-bold text-[#3C4F69]">--goal &lt;text&gt;</span> : Operational intent (e.g. &quot;Search flights and fares&quot;)</li>
+                      <li><span className="font-bold text-[#3C4F69]">--name &lt;text&gt;</span> : Custom project identifier name</li>
+                      <li><span className="font-bold text-[#3C4F69]">--host &lt;url&gt;</span> : Web2MCP host domain (default: https://web2mcp.ssh.net.in)</li>
+                      <li><span className="font-bold text-[#3C4F69]">--skip-probe</span> : Skip initial live probe validation step</li>
+                    </ul>
+                  </div>
+                  <pre className="p-3 bg-[#0A2540] text-emerald-300 rounded-md text-xs font-mono overflow-x-auto">
+                    web2mcp add https://example.com/flights --goal &quot;Search flights and fares&quot;
+                  </pre>
                 </div>
 
-                <div className="p-3.5 rounded-lg bg-[#F8FAFD] border border-[#E5EDF5] space-y-1 shadow-[0_1px_2px_rgba(50,50,93,0.04)] stripe-hover-card">
-                  <p className="font-mono text-[#533AFD] font-bold">web2mcp test &lt;projectId&gt; [toolName]</p>
-                  <p className="text-[#50617A]">Executes synthetic validation probes against active MCP tools.</p>
+                {/* web2mcp list */}
+                <div className="p-5 rounded-lg bg-white border border-[#E5EDF5] space-y-3 shadow-[0_2px_4px_rgba(50,50,93,0.05)] stripe-hover-card">
+                  <div className="flex items-center justify-between">
+                    <div className="font-mono text-sm font-bold text-[#0A2540] flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded bg-[#F0F3FF] text-[#533AFD] text-xs">list</span>
+                      <code>web2mcp list</code>
+                    </div>
+                    <button
+                      onClick={() =>
+                        copyToClipboard('web2mcp list --project proj-84bd028d', 'cli-list-cmd')
+                      }
+                      className="text-xs text-[#50617A] hover:text-[#0A2540] flex items-center gap-1 transition-colors"
+                    >
+                      {copiedKey === 'cli-list-cmd' ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
+                      <span>{copiedKey === 'cli-list-cmd' ? 'Copied' : 'Copy'}</span>
+                    </button>
+                  </div>
+                  <p className="text-[#50617A] text-xs leading-relaxed">
+                    Lists all registered Web2MCP projects, target URLs, health status, and active tool endpoints.
+                  </p>
+                  <div className="space-y-1.5 pt-1">
+                    <p className="font-semibold text-[#0A2540] text-[11px]">Options & Flags:</p>
+                    <ul className="space-y-1 text-[#50617A] font-mono text-[11px] list-disc list-inside">
+                      <li><span className="font-bold text-[#3C4F69]">--project &lt;id&gt;</span> : Display generated tools and detailed schema for a specific project</li>
+                      <li><span className="font-bold text-[#3C4F69]">--host &lt;url&gt;</span> : Custom host domain</li>
+                    </ul>
+                  </div>
+                  <pre className="p-3 bg-[#0A2540] text-[#D6D9FC] rounded-md text-xs font-mono overflow-x-auto">
+                    web2mcp list --project proj-84bd028d
+                  </pre>
                 </div>
 
-                <div className="p-3.5 rounded-lg bg-[#F8FAFD] border border-[#E5EDF5] space-y-1 shadow-[0_1px_2px_rgba(50,50,93,0.04)] stripe-hover-card">
-                  <p className="font-mono text-[#533AFD] font-bold">web2mcp install &lt;projectId&gt; --client [cursor|claude|code]</p>
-                  <p className="text-[#50617A]">Automatically registers the MCP server into local IDE settings files.</p>
+                {/* web2mcp test */}
+                <div className="p-5 rounded-lg bg-white border border-[#E5EDF5] space-y-3 shadow-[0_2px_4px_rgba(50,50,93,0.05)] stripe-hover-card">
+                  <div className="flex items-center justify-between">
+                    <div className="font-mono text-sm font-bold text-[#0A2540] flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded bg-[#F0F3FF] text-[#533AFD] text-xs">test</span>
+                      <code>web2mcp test &lt;tool_name&gt;</code>
+                    </div>
+                    <button
+                      onClick={() =>
+                        copyToClipboard(
+                          'web2mcp test search_flights --params "{\"origin\":\"NYC\"}"',
+                          'cli-test-cmd'
+                        )
+                      }
+                      className="text-xs text-[#50617A] hover:text-[#0A2540] flex items-center gap-1 transition-colors"
+                    >
+                      {copiedKey === 'cli-test-cmd' ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
+                      <span>{copiedKey === 'cli-test-cmd' ? 'Copied' : 'Copy'}</span>
+                    </button>
+                  </div>
+                  <p className="text-[#50617A] text-xs leading-relaxed">
+                    Executes a live probe test against a generated tool schema to verify handler responsiveness and output structure.
+                  </p>
+                  <div className="space-y-1.5 pt-1">
+                    <p className="font-semibold text-[#0A2540] text-[11px]">Options & Flags:</p>
+                    <ul className="space-y-1 text-[#50617A] font-mono text-[11px] list-disc list-inside">
+                      <li><span className="font-bold text-[#3C4F69]">--project &lt;id&gt;</span> : Filter tool matching by project ID</li>
+                      <li><span className="font-bold text-[#3C4F69]">--params &lt;json&gt;</span> : Custom JSON parameter payload to pass into the probe execution</li>
+                    </ul>
+                  </div>
+                  <pre className="p-3 bg-[#0A2540] text-amber-300 rounded-md text-xs font-mono overflow-x-auto">
+                    {`web2mcp test search_flights --params '{"origin":"NYC"}'`}
+                  </pre>
                 </div>
 
-                <div className="p-3.5 rounded-lg bg-[#F8FAFD] border border-[#E5EDF5] space-y-1 shadow-[0_1px_2px_rgba(50,50,93,0.04)] stripe-hover-card">
-                  <p className="font-mono text-[#533AFD] font-bold">web2mcp list</p>
-                  <p className="text-[#50617A]">Lists all active projects and healthy endpoints.</p>
+                {/* web2mcp install */}
+                <div className="p-5 rounded-lg bg-white border border-[#E5EDF5] space-y-3 shadow-[0_2px_4px_rgba(50,50,93,0.05)] stripe-hover-card">
+                  <div className="flex items-center justify-between">
+                    <div className="font-mono text-sm font-bold text-[#0A2540] flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded bg-[#F0F3FF] text-[#533AFD] text-xs">install</span>
+                      <code>web2mcp install &lt;ide&gt;</code>
+                    </div>
+                    <button
+                      onClick={() =>
+                        copyToClipboard(
+                          'web2mcp install cursor --project proj-84bd028d',
+                          'cli-install-cmd'
+                        )
+                      }
+                      className="text-xs text-[#50617A] hover:text-[#0A2540] flex items-center gap-1 transition-colors"
+                    >
+                      {copiedKey === 'cli-install-cmd' ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
+                      <span>{copiedKey === 'cli-install-cmd' ? 'Copied' : 'Copy'}</span>
+                    </button>
+                  </div>
+                  <p className="text-[#50617A] text-xs leading-relaxed">
+                    Auto-configures an IDE client (<code>cursor</code>, <code>claude</code>, or <code>vscode</code>) by automatically editing settings files with MCP server configurations.
+                  </p>
+                  <div className="space-y-1.5 pt-1">
+                    <p className="font-semibold text-[#0A2540] text-[11px]">Options & Flags:</p>
+                    <ul className="space-y-1 text-[#50617A] font-mono text-[11px] list-disc list-inside">
+                      <li><span className="font-bold text-[#3C4F69]">--project &lt;id&gt;</span> : Target Web2MCP project ID</li>
+                      <li><span className="font-bold text-[#3C4F69]">--name &lt;name&gt;</span> : Custom server identifier name in configuration</li>
+                      <li><span className="font-bold text-[#3C4F69]">--host &lt;url&gt;</span> : Host domain (default: https://web2mcp.ssh.net.in)</li>
+                      <li><span className="font-bold text-[#3C4F69]">--endpoint &lt;url&gt;</span> : Explicit MCP endpoint URL</li>
+                      <li><span className="font-bold text-[#3C4F69]">--apiKey &lt;key&gt;</span> : Bearer API key authentication credential</li>
+                    </ul>
+                  </div>
+                  <pre className="p-3 bg-[#0A2540] text-[#D6D9FC] rounded-md text-xs font-mono overflow-x-auto">
+                    web2mcp install cursor --project proj-84bd028d
+                  </pre>
+                </div>
+
+                {/* web2mcp serve */}
+                <div className="p-5 rounded-lg bg-white border border-[#E5EDF5] space-y-3 shadow-[0_2px_4px_rgba(50,50,93,0.05)] stripe-hover-card">
+                  <div className="flex items-center justify-between">
+                    <div className="font-mono text-sm font-bold text-[#0A2540] flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded bg-[#F0F3FF] text-[#533AFD] text-xs">serve</span>
+                      <code>web2mcp serve</code>
+                    </div>
+                    <button
+                      onClick={() =>
+                        copyToClipboard('web2mcp serve --project proj-84bd028d', 'cli-serve-cmd')
+                      }
+                      className="text-xs text-[#50617A] hover:text-[#0A2540] flex items-center gap-1 transition-colors"
+                    >
+                      {copiedKey === 'cli-serve-cmd' ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
+                      <span>{copiedKey === 'cli-serve-cmd' ? 'Copied' : 'Copy'}</span>
+                    </button>
+                  </div>
+                  <p className="text-[#50617A] text-xs leading-relaxed">
+                    Runs a local stdio Model Context Protocol (MCP) server for local IDE tools or Desktop applications (e.g. Claude Desktop).
+                  </p>
+                  <div className="space-y-1.5 pt-1">
+                    <p className="font-semibold text-[#0A2540] text-[11px]">Options & Flags:</p>
+                    <ul className="space-y-1 text-[#50617A] font-mono text-[11px] list-disc list-inside">
+                      <li><span className="font-bold text-[#3C4F69]">--project &lt;id&gt;</span> : (Required) Project ID to serve over stdio</li>
+                    </ul>
+                  </div>
+                  <pre className="p-3 bg-[#0A2540] text-[#D6D9FC] rounded-md text-xs font-mono overflow-x-auto">
+                    web2mcp serve --project proj-84bd028d
+                  </pre>
                 </div>
               </div>
             </section>
